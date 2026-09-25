@@ -1,0 +1,225 @@
+{
+  "atlas": {
+    "type": "mtsdf",
+    "distanceRange": 4,
+    "size": 128,
+    "width": 512,
+    "height": 512,
+    "yOrigin": "bottom"
+  },
+  "metrics": {
+    "emSize": 1,
+    "lineHeight": 1,
+    "ascender": 1,
+    "descender": 0,
+    "underlineY": 0.01,
+    "underlineThickness": 0
+  },
+  "glyphs": [
+    {
+      "unicode": 97,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.7734375,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 0,
+        "bottom": 397,
+        "right": 101,
+        "top": 512
+      },
+      "name": "air_drop"
+    },
+    {
+      "unicode": 98,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.16093748807907104,
+        "right": 0.8828125,
+        "top": 0.840624988079071
+      },
+      "atlasBounds": {
+        "left": 105,
+        "bottom": 425,
+        "right": 220,
+        "top": 512
+      },
+      "name": "altar"
+    },
+    {
+      "unicode": 99,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.8828125,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 0,
+        "bottom": 278,
+        "right": 115,
+        "top": 393
+      },
+      "name": "clover_leaf"
+    },
+    {
+      "unicode": 100,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.09974998235702515,
+        "right": 0.8828125,
+        "top": 0.8966249823570251
+      },
+      "atlasBounds": {
+        "left": 119,
+        "bottom": 319,
+        "right": 234,
+        "top": 421
+      },
+      "name": "coming_soon"
+    },
+    {
+      "unicode": 101,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.71875,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 238,
+        "bottom": 397,
+        "right": 332,
+        "top": 512
+      },
+      "name": "flame"
+    },
+    {
+      "unicode": 102,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.4453125,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 238,
+        "bottom": 278,
+        "right": 297,
+        "top": 393
+      },
+      "name": "lighthouse"
+    },
+    {
+      "unicode": 103,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.8828125,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 301,
+        "bottom": 278,
+        "right": 416,
+        "top": 393
+      },
+      "name": "meteor"
+    },
+    {
+      "unicode": 104,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.17900002002716064,
+        "right": 0.8828125,
+        "top": 0.8196250200271606
+      },
+      "atlasBounds": {
+        "left": 336,
+        "bottom": 430,
+        "right": 451,
+        "top": 512
+      },
+      "name": "mountain"
+    },
+    {
+      "unicode": 105,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.8828125,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 119,
+        "bottom": 200,
+        "right": 234,
+        "top": 315
+      },
+      "name": "pickaxe"
+    },
+    {
+      "unicode": 106,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.8515625,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 0,
+        "bottom": 159,
+        "right": 111,
+        "top": 274
+      },
+      "name": "treasure_chest"
+    },
+    {
+      "unicode": 107,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.8828125,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 0,
+        "bottom": 20,
+        "right": 115,
+        "top": 135
+      },
+      "name": "event"
+    },
+    {
+      "unicode": 108,
+      "advance": 1,
+      "planeBounds": {
+        "left": -0.015625,
+        "bottom": 0.050187528133392334,
+        "right": 0.8828125,
+        "top": 0.9486250281333923
+      },
+      "atlasBounds": {
+        "left": 120,
+        "bottom": 20,
+        "right": 235,
+        "top": 135
+      },
+      "name": "star"
+    }
+  ],
+  "kerning": []
+}

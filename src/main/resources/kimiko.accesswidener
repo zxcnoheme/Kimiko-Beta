@@ -1,0 +1,92 @@
+accessWidener	v2	named
+accessible	class	net/minecraft/client/texture/PlayerSkinProvider$FileCache
+accessible	class	net/minecraft/client/font/TextRenderer$Drawer
+accessible	class	net/minecraft/client/gui/hud/ChatHud$LineConsumer
+accessible	field	net/minecraft/client/model/ModelPart$Cuboid	sides	[Lnet/minecraft/client/model/ModelPart$Quad;
+accessible	class	net/minecraft/client/model/ModelPart$Quad
+accessible	class	net/minecraft/client/model/ModelPart$Vertex
+accessible	field	net/minecraft/client/model/ModelPart	children	Ljava/util/Map;
+accessible	class	net/minecraft/client/option/SimpleOption$Callbacks
+accessible	method	net/minecraft/entity/decoration/DisplayEntity	getBrightness	()I
+accessible	method	net/minecraft/entity/decoration/DisplayEntity$BlockDisplayEntity	getBlockState	()Lnet/minecraft/block/BlockState;
+accessible	method	net/minecraft/entity/decoration/DisplayEntity$ItemDisplayEntity	getItemStack	()Lnet/minecraft/item/ItemStack;
+accessible	method	net/minecraft/client/render/Frustum	intersectAab	(DDDDDD)I
+accessible	method	net/minecraft/client/gui/hud/debug/DebugHudEntries	register	(Lnet/minecraft/util/Identifier;Lnet/minecraft/client/gui/hud/debug/DebugHudEntry;)Lnet/minecraft/util/Identifier;
+accessible	field	net/minecraft/network/ClientConnection	channel	Lio/netty/channel/Channel;
+accessible	field	net/minecraft/client/network/AllowedAddressResolver	redirectResolver	Lnet/minecraft/client/network/RedirectResolver;
+accessible	field	net/minecraft/client/gui/screen/GameMenuScreen	exitButton	Lnet/minecraft/client/gui/widget/ButtonWidget;
+accessible	field	net/minecraft/network/ClientConnection	packetSizeLogger	Lnet/minecraft/network/handler/PacketSizeLogger;
+accessible	field	net/minecraft/entity/EntityType	dimensions	Lnet/minecraft/entity/EntityDimensions;
+accessible	field	net/minecraft/client/texture/SpriteContents	width	I
+accessible	field	net/minecraft/client/texture/SpriteContents	height	I
+accessible	field	net/minecraft/client/texture/SpriteContents	image	Lnet/minecraft/client/texture/NativeImage;
+accessible	field	net/minecraft/entity/ItemEntity	uniqueOffset	F
+accessible	field	net/minecraft/block/AbstractBlock	velocityMultiplier	F
+accessible	field	net/minecraft/client/gui/screen/option/ControlsListWidget$KeyBindingEntry	RESET_TEXT	Lnet/minecraft/text/Text;
+accessible	field	net/minecraft/client/MinecraftClient	fontManager	Lnet/minecraft/client/font/FontManager;
+accessible	field	net/minecraft/client/font/FontManager	fontStorages	Ljava/util/Map;
+accessible	field	net/minecraft/client/font/FontStorage	bakedGlyphCache	Lnet/minecraft/client/font/GlyphContainer;
+accessible	field	net/minecraft/entity/PositionInterpolator	data	Lnet/minecraft/entity/PositionInterpolator$Data;
+accessible	field	net/minecraft/entity/PositionInterpolator$Data	pos	Lnet/minecraft/util/math/Vec3d;
+accessible	field	net/minecraft/entity/PositionInterpolator$Data	yaw	F
+accessible	field	net/minecraft/entity/PositionInterpolator$Data	pitch	F
+accessible	field	net/minecraft/entity/player/PlayerInventory	equipment	Lnet/minecraft/entity/EntityEquipment;
+accessible	field	net/minecraft/client/input/Input	movementVector	Lnet/minecraft/util/math/Vec2f;
+accessible	field	net/minecraft/util/math/Direction	YXZ	Lcom/google/common/collect/ImmutableList;
+accessible	field	net/minecraft/client/font/GlyphBaker	fontId	Lnet/minecraft/util/Identifier;
+accessible	field	net/minecraft/client/gui/screen/world/WorldIcon	UNKNOWN_SERVER_ID	Lnet/minecraft/util/Identifier;
+accessible	field	net/minecraft/entity/boss/dragon/EnderDragonEntity	body	Lnet/minecraft/entity/boss/dragon/EnderDragonPart;
+accessible	field	net/minecraft/entity/passive/AbstractHorseEntity	lastAngryAnimationProgress	F
+accessible	field	net/minecraft/network/ClientConnection	queuedTasks	Ljava/util/Queue;
+accessible	field	net/minecraft/world/attribute/EnvironmentAttribute	synced	Z
+accessible	field	net/minecraft/client/resource/language/TranslationStorage	translations	Ljava/util/Map;
+accessible	field	net/minecraft/client/gui/screen/multiplayer/SocialInteractionsScreen	TITLE	Lnet/minecraft/text/Text;
+accessible	field	net/minecraft/client/gui/widget/TexturedButtonWidget	textures	Lnet/minecraft/client/gui/screen/ButtonTextures;
+mutable	field	net/minecraft/entity/EntityType	dimensions	Lnet/minecraft/entity/EntityDimensions;
+mutable	field	net/minecraft/block/AbstractBlock	velocityMultiplier	F
+mutable	field	net/minecraft/client/input/Input	movementVector	Lnet/minecraft/util/math/Vec2f;
+mutable	field	net/minecraft/world/attribute/EnvironmentAttribute	synced	Z
+accessible	method	net/minecraft/screen/GenericContainerScreenHandler	<init>	(Lnet/minecraft/screen/ScreenHandlerType;ILnet/minecraft/entity/player/PlayerInventory;I)V
+accessible	method	net/minecraft/entity/passive/CamelEntity	getPassengerAttachmentY	(ZFLnet/minecraft/entity/EntityDimensions;F)D
+accessible	method	net/minecraft/client/gui/screen/multiplayer/ConnectScreen	setStatus	(Lnet/minecraft/text/Text;)V
+accessible	method	net/minecraft/item/BlockItem	getPlacementState	(Lnet/minecraft/item/ItemPlacementContext;)Lnet/minecraft/block/BlockState;
+accessible	method	net/minecraft/block/AbstractBlock	getPickStack	(Lnet/minecraft/world/WorldView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Z)Lnet/minecraft/item/ItemStack;
+accessible	method	net/minecraft/entity/Entity	setRotation	(FF)V
+accessible	method	net/minecraft/client/gui/widget/TextFieldWidget	getMaxLength	()I
+accessible	method	net/minecraft/block/entity/BlockEntity	writeIdentifyingData	(Lnet/minecraft/storage/WriteView;)V
+accessible	method	net/minecraft/client/render/debug/GameTestDebugRenderer$Marker	<init>	(ILjava/lang/String;J)V
+accessible	method	net/minecraft/client/font/FontStorage$GlyphPair	<init>	(Ljava/util/function/Supplier;Ljava/util/function/Supplier;)V
+extendable	method	net/minecraft/entity/Entity	updateTrackedPositionAndAngles	(Lnet/minecraft/util/math/Vec3d;FF)V
+accessible	method	net/minecraft/block/StairsBlock	getStairShape	(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;)Lnet/minecraft/block/enums/StairShape;
+accessible	method	net/minecraft/block/FireBlock	isFlammable	(Lnet/minecraft/block/BlockState;)Z
+accessible	method	net/minecraft/block/RedstoneWireBlock	getRenderConnectionType	(Lnet/minecraft/world/BlockView;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/util/math/Direction;)Lnet/minecraft/block/enums/WireConnection;
+accessible	class	net/minecraft/client/font/FontStorage$GlyphPair
+accessible	class	net/minecraft/entity/Entity$QueuedCollisionCheck
+accessible	class	net/minecraft/client/render/debug/GameTestDebugRenderer$Marker
+accessible	class	net/minecraft/client/network/ClientPlayNetworkHandler$CommandRunResult
+accessible	class	net/minecraft/client/gui/screen/GameModeSwitcherScreen$GameModeSelection
+accessible	method	net/minecraft/client/gl/RenderPipelines	register	(Lcom/mojang/blaze3d/pipeline/RenderPipeline;)Lcom/mojang/blaze3d/pipeline/RenderPipeline;
+accessible	field	net/minecraft/client/gl/RenderPipelines	TRANSFORMS_PROJECTION_FOG_LIGHTING_SNIPPET	Lcom/mojang/blaze3d/pipeline/RenderPipeline$Snippet;
+accessible	method	net/minecraft/client/render/RenderLayer	of	(Ljava/lang/String;Lnet/minecraft/client/render/RenderSetup;)Lnet/minecraft/client/render/RenderLayer;
+accessible	method	net/minecraft/client/util/math/MatrixStack$Entry	copy	(Lnet/minecraft/client/util/math/MatrixStack$Entry;)V
+accessible	field	net/minecraft/client/render/WorldRenderer	bufferBuilders	Lnet/minecraft/client/render/BufferBuilderStorage;
+accessible	field	net/minecraft/client/render/WorldRenderer	worldRenderState	Lnet/minecraft/client/render/state/WorldRenderState;
+accessible	field	net/minecraft/client/render/entity/EntityRenderManager	renderers	Ljava/util/Map;
+extendable	method	net/minecraft/client/render/entity/EntityRenderer	getAndUpdateRenderState	(Lnet/minecraft/entity/Entity;F)Lnet/minecraft/client/render/entity/state/EntityRenderState;
+accessible	method	net/minecraft/client/render/entity/LivingEntityRenderer	clampBodyYaw	(Lnet/minecraft/entity/LivingEntity;FF)F
+accessible	method	net/minecraft/client/render/entity/BipedEntityRenderer	getEquippedStack	(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/item/ItemStack;
+accessible	method	net/minecraft/client/render/entity/LivingEntityRenderer	shouldFlipUpsideDown	(Ljava/lang/String;)Z
+accessible	field	net/minecraft/client/render/entity/state/LivingEntityRenderState	headItemRenderState	Lnet/minecraft/client/render/item/ItemRenderState;
+accessible	field	net/minecraft/client/render/entity/state/PlayerEntityRenderState	spyglassState	Lnet/minecraft/client/render/item/ItemRenderState;
+mutable	field	net/minecraft/client/render/entity/state/LivingEntityRenderState	headItemRenderState	Lnet/minecraft/client/render/item/ItemRenderState;
+mutable	field	net/minecraft/client/render/entity/state/PlayerEntityRenderState	spyglassState	Lnet/minecraft/client/render/item/ItemRenderState;
+mutable	field	net/minecraft/client/render/entity/state/ArmedEntityRenderState	rightHandItemState	Lnet/minecraft/client/render/item/ItemRenderState;
+mutable	field	net/minecraft/client/render/entity/state/ArmedEntityRenderState	leftHandItemState	Lnet/minecraft/client/render/item/ItemRenderState;
+accessible	field	net/minecraft/client/render/block/entity/BlockEntityRenderManager	renderers	Ljava/util/Map;
+extendable	method	net/minecraft/client/model/Model	render	(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;III)V
+accessible	method	net/minecraft/client/render/entity/feature/ArmorFeatureRenderer	hasModel	(Lnet/minecraft/component/type/EquippableComponent;Lnet/minecraft/entity/EquipmentSlot;)Z
+accessible	method	net/minecraft/client/render/entity/feature/ArmorFeatureRenderer	getModel	(Lnet/minecraft/client/render/entity/state/BipedEntityRenderState;Lnet/minecraft/entity/EquipmentSlot;)Lnet/minecraft/client/render/entity/model/BipedEntityModel;
+accessible	method	net/minecraft/client/render/entity/feature/ArmorFeatureRenderer	usesInnerModel	(Lnet/minecraft/entity/EquipmentSlot;)Z
+accessible	field	net/minecraft/client/render/entity/LivingEntityRenderer	features	Ljava/util/List;
+accessible	field	net/minecraft/client/model/ModelPart	cuboids	Ljava/util/List;
+accessible	field	net/minecraft/component/MergedComponentMap	copyOnWrite	Z

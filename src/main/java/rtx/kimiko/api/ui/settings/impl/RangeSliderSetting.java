@@ -1,0 +1,261 @@
+/*
+ * Decompiled with CFR 0.152.
+ * 
+ * Could not load the following classes:
+ *  kotlin.Metadata
+ *  kotlin.jvm.internal.DefaultConstructorMarker
+ *  kotlin.jvm.internal.Intrinsics
+ *  org.jetbrains.annotations.NotNull
+ *  org.jetbrains.annotations.Nullable
+ */
+package rtx.kimiko.api.ui.settings.impl;
+
+import java.awt.Color;
+import java.util.Arrays;
+import kotlin.Metadata;
+import kotlin.jvm.internal.DefaultConstructorMarker;
+import kotlin.jvm.internal.Intrinsics;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import rtx.kimiko.api.drags.Position;
+import rtx.kimiko.api.ui.settings.RenderHelper;
+import rtx.kimiko.api.ui.settings.Setting;
+import rtx.kimiko.api.ui.theme.ClientAccent;
+import rtx.kimiko.utils.render.fonts.Fonts;
+import rtx.kimiko.utils.render.render2d.Render2D;
+import rtx.kimiko.utils.sounds.Sounds;
+
+@Metadata(mv={2, 4, 0}, k=1, xi=48, d1={"\u0000@\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0010\u0007\n\u0002\b\u0007\n\u0002\u0010\u0002\n\u0002\b\u0012\n\u0002\u0010\b\n\u0002\b\u0011\n\u0002\u0010\t\n\u0002\b\u0004\b\u0016\u0018\u0000 <2\u00020\u0001:\u0001<B\u000f\u0012\u0006\u0010\u0003\u001a\u00020\u0002\u00a2\u0006\u0004\b\u0004\u0010\u0005J\u000f\u0010\u0007\u001a\u00020\u0006H\u0016\u00a2\u0006\u0004\b\u0007\u0010\bJ\u000f\u0010\n\u001a\u00020\tH\u0016\u00a2\u0006\u0004\b\n\u0010\u000bJ\u000f\u0010\r\u001a\u00020\fH\u0016\u00a2\u0006\u0004\b\r\u0010\u000eJ\u000f\u0010\u000f\u001a\u00020\fH\u0016\u00a2\u0006\u0004\b\u000f\u0010\u000eJ/\u0010\u0015\u001a\u00020\u00142\u0006\u0010\u0010\u001a\u00020\f2\u0006\u0010\u0011\u001a\u00020\f2\u0006\u0010\u0012\u001a\u00020\f2\u0006\u0010\u0013\u001a\u00020\fH\u0016\u00a2\u0006\u0004\b\u0015\u0010\u0016J7\u0010\u001b\u001a\u00020\u00142\u0006\u0010\u0017\u001a\u00020\f2\u0006\u0010\u0018\u001a\u00020\f2\u0006\u0010\u0019\u001a\u00020\f2\u0006\u0010\u001a\u001a\u00020\f2\u0006\u0010\u0013\u001a\u00020\fH\u0002\u00a2\u0006\u0004\b\u001b\u0010\u001cJ7\u0010\u001f\u001a\u00020\t2\u0006\u0010\u0010\u001a\u00020\f2\u0006\u0010\u0011\u001a\u00020\f2\u0006\u0010\u0012\u001a\u00020\f2\u0006\u0010\u001d\u001a\u00020\f2\u0006\u0010\u001e\u001a\u00020\fH\u0016\u00a2\u0006\u0004\b\u001f\u0010 J7\u0010!\u001a\u00020\t2\u0006\u0010\u0010\u001a\u00020\f2\u0006\u0010\u0011\u001a\u00020\f2\u0006\u0010\u0012\u001a\u00020\f2\u0006\u0010\u001d\u001a\u00020\f2\u0006\u0010\u001e\u001a\u00020\fH\u0016\u00a2\u0006\u0004\b!\u0010 J\u000f\u0010\"\u001a\u00020\u0014H\u0016\u00a2\u0006\u0004\b\"\u0010#J\u0017\u0010%\u001a\u00020\u00142\u0006\u0010$\u001a\u00020\fH\u0002\u00a2\u0006\u0004\b%\u0010&J\u0017\u0010(\u001a\u00020'2\u0006\u0010$\u001a\u00020\fH\u0002\u00a2\u0006\u0004\b(\u0010)J\u001f\u0010,\u001a\u00020\u00062\u0006\u0010*\u001a\u00020\f2\u0006\u0010+\u001a\u00020\fH\u0002\u00a2\u0006\u0004\b,\u0010-J\u0017\u0010/\u001a\u00020\u00062\u0006\u0010.\u001a\u00020\fH\u0002\u00a2\u0006\u0004\b/\u00100R\u0014\u0010\u0003\u001a\u00020\u00028\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0003\u00101R\u0016\u00102\u001a\u00020'8\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b2\u00103R\u0018\u00104\u001a\u0004\u0018\u00010\u00068\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b4\u00105R\u0016\u00106\u001a\u00020\f8\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b6\u00107R\u0016\u00108\u001a\u00020\f8\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b8\u00107R\u0016\u0010:\u001a\u0002098\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b:\u0010;\u00a8\u0006="}, d2={"Lrtx/kimiko/api/ui/settings/impl/RangeSliderSetting;", "Lrtx/kimiko/api/ui/settings/Setting;", "Lrtx/kimiko/api/modules/settings/impl/RangeSliderSetting;", "backend", "<init>", "(Lrtx/kimiko/api/modules/settings/impl/RangeSliderSetting;)V", "", "name", "()Ljava/lang/String;", "", "isVisible", "()Z", "", "height", "()F", "preferredWidth", "x", "y", "w", "alpha", "", "render", "(FFFF)V", "barX", "barW", "barY", "pos", "knob", "(FFFFF)V", "mx", "my", "click", "(FFFFF)Z", "middleClick", "releaseDrag", "()V", "progress", "drag", "(F)V", "", "closest", "(F)I", "low", "high", "label", "(FF)Ljava/lang/String;", "v", "format", "(F)Ljava/lang/String;", "Lrtx/kimiko/api/modules/settings/impl/RangeSliderSetting;", "draggingHandle", "I", "lastSoundText", "Ljava/lang/String;", "visMin", "F", "visMax", "", "lastNs", "J", "Companion", "rtx.kimiko:kimiko"})
+public class RangeSliderSetting
+implements Setting {
+    @NotNull
+    public static final Companion Companion = new Companion(null);
+    @NotNull
+    private final rtx.kimiko.api.modules.settings.impl.RangeSliderSetting backend;
+    private int draggingHandle;
+    @Nullable
+    private String lastSoundText;
+    private float visMin;
+    private float visMax;
+    private long lastNs;
+    public static final float ROW_H = 22.0f;
+    public static final float BAR_H = 3.0f;
+    public static final float BAR_TOP = 16.0f;
+
+    public RangeSliderSetting(@NotNull rtx.kimiko.api.modules.settings.impl.RangeSliderSetting backend) {
+        Intrinsics.checkNotNullParameter((Object)backend, (String)"backend");
+        this.backend = backend;
+        this.visMin = -1.0f;
+        this.visMax = -1.0f;
+        this.lastNs = System.nanoTime();
+    }
+
+    @Override
+    @NotNull
+    public String name() {
+        return this.backend.getName();
+    }
+
+    @Override
+    public boolean isVisible() {
+        return this.backend.isVisible();
+    }
+
+    @Override
+    public float height() {
+        return 22.0f;
+    }
+
+    @Override
+    public float preferredWidth() {
+        float nameW = Fonts.MEDIUM.width(this.backend.getDisplayName(), 6.5f);
+        float valW = Fonts.MEDIUM.width(this.label(this.backend.getMax(), this.backend.getMax()), 6.0f);
+        return Math.max(100.0f, 6.0f + nameW + 6.0f + valW + 6.0f);
+    }
+
+    @Override
+    public void render(float x, float y, float w, float alpha) {
+        float maxPos;
+        float minPos;
+        long now = System.nanoTime();
+        float dt = Math.min(0.1f, (float)(now - this.lastNs) / 1.0E9f);
+        this.lastNs = now;
+        float barX = x + 6.0f;
+        float barW = w - 12.0f;
+        float barY = y + 16.0f;
+        if (this.draggingHandle != 0) {
+            this.drag(RangeSliderSetting.Companion.clamp01((Position.Companion.mouseX() - barX) / barW));
+        }
+        float valSize = 6.0f;
+        String valText = this.label(this.backend.getMinValue(), this.backend.getMaxValue());
+        float tw = Fonts.MEDIUM.width(valText, valSize);
+        float valX = x + w - 6.0f - tw;
+        Fonts.MEDIUM.draw(valText, valX, y + 4.2f + 0.25f, valSize, RangeSliderSetting.Companion.rgba(255, 255, 255, (float)238 * alpha));
+        RenderHelper.drawName(this.backend.getDisplayName(), x, y, valX - (x + 6.0f) - 6.0f, alpha);
+        float targetMin = this.backend.getMinProgress();
+        float targetMax = this.backend.getMaxProgress();
+        if (this.visMin < 0.0f) {
+            this.visMin = targetMin;
+        }
+        if (this.visMax < 0.0f) {
+            this.visMax = targetMax;
+        }
+        float ease = 1.0f - (float)Math.exp(-dt * 18.0f);
+        this.visMin += (targetMin - this.visMin) * ease;
+        this.visMax += (targetMax - this.visMax) * ease;
+        if (Math.abs(targetMin - this.visMin) < 0.0015f) {
+            this.visMin = targetMin;
+        }
+        if (Math.abs(targetMax - this.visMax) < 0.0015f) {
+            this.visMax = targetMax;
+        }
+        if ((minPos = barX + barW * RangeSliderSetting.Companion.clamp01(this.visMin)) > (maxPos = barX + barW * RangeSliderSetting.Companion.clamp01(this.visMax))) {
+            float swap = minPos;
+            minPos = maxPos;
+            maxPos = swap;
+        }
+        float trackR = 1.5f;
+        Render2D.rect(barX, barY, barW, 3.0f, trackR, RangeSliderSetting.Companion.rgba(16, 16, 16, (float)64 * alpha));
+        if (maxPos - minPos > 0.6f) {
+            float fillCx = (minPos + maxPos) * 0.5f;
+            float fillCy = barY + 1.5f;
+            int fa = ClientAccent.gradientAAt((float)215 * alpha, fillCx, fillCy);
+            int fb = ClientAccent.gradientBAt((float)215 * alpha, fillCx, fillCy);
+            Render2D.rect(minPos, barY, maxPos - minPos, 3.0f, trackR, fa, fb, fb, fa);
+            Render2D.outline(minPos, barY, maxPos - minPos, 3.0f, trackR, 0.5f, ClientAccent.accentBrightAt((float)150 * alpha, fillCx, fillCy));
+        }
+        this.knob(barX, barW, barY, minPos, alpha);
+        this.knob(barX, barW, barY, maxPos, alpha);
+    }
+
+    private final void knob(float barX, float barW, float barY, float pos, float alpha) {
+        float thW = 6.5f;
+        float thH = 4.0f;
+        float thR = 2.0f;
+        float thX = Math.max(barX, Math.min(barX + barW - thW, pos - thW * 0.5f));
+        float thY = barY + 1.5f - thH * 0.5f;
+        Render2D.rect(thX, thY, thW, thH, thR, RangeSliderSetting.Companion.rgba(255, 255, 255, (float)245 * alpha));
+        Render2D.outline(thX - 0.5f, thY - 0.5f, thW + 1.0f, thH + 1.0f, thR, 0.5f, RangeSliderSetting.Companion.rgba(16, 16, 16, (float)128 * alpha));
+    }
+
+    @Override
+    public boolean click(float x, float y, float w, float mx, float my) {
+        float barX = x + 6.0f;
+        float barW = w - 12.0f;
+        float barY = y + 16.0f;
+        if (!RangeSliderSetting.Companion.inside(mx, my, barX, barW, barY)) {
+            return false;
+        }
+        float pct = RangeSliderSetting.Companion.clamp01((mx - barX) / barW);
+        this.draggingHandle = this.closest(pct);
+        this.drag(pct);
+        this.lastSoundText = this.label(this.backend.getMinValue(), this.backend.getMaxValue());
+        return true;
+    }
+
+    @Override
+    public boolean middleClick(float x, float y, float w, float mx, float my) {
+        float barX = x + 6.0f;
+        float barW = w - 12.0f;
+        float barY = y + 16.0f;
+        if (!RangeSliderSetting.Companion.inside(mx, my, barX, barW, barY)) {
+            return false;
+        }
+        this.draggingHandle = 0;
+        this.backend.setValue(this.backend.getDefaultMinValue(), this.backend.getDefaultMaxValue());
+        Sounds.play("slider");
+        return true;
+    }
+
+    @Override
+    public void releaseDrag() {
+        this.draggingHandle = 0;
+    }
+
+    private final void drag(float progress) {
+        if (this.draggingHandle == 0) {
+            return;
+        }
+        float value = this.backend.valueAtProgress(progress);
+        float low = this.backend.getMinValue();
+        float high = this.backend.getMaxValue();
+        if (Math.abs(high - low) < 1.0E-4f) {
+            int n = this.draggingHandle = value > high ? 2 : 1;
+        }
+        if (this.draggingHandle == 1) {
+            low = Math.min(value, high);
+        } else {
+            high = Math.max(value, low);
+        }
+        this.backend.setValue(low, high);
+        String text = this.label(this.backend.getMinValue(), this.backend.getMaxValue());
+        if (!Intrinsics.areEqual((Object)text, (Object)this.lastSoundText)) {
+            this.lastSoundText = text;
+            Sounds.play("slider");
+        }
+    }
+
+    private final int closest(float progress) {
+        float toMax;
+        float toMin = Math.abs(progress - this.backend.getMinProgress());
+        if (Math.abs(toMin - (toMax = Math.abs(progress - this.backend.getMaxProgress()))) < 1.0E-4f) {
+            return progress > this.backend.getMaxProgress() ? 2 : 1;
+        }
+        return toMin <= toMax ? 1 : 2;
+    }
+
+    private final String label(float low, float high) {
+        return this.format(low) + " - " + this.format(high) + this.backend.getSuffix();
+    }
+
+    private final String format(float v) {
+        if (this.backend.isInteger()) {
+            String string = "%.0f";
+            Object[] objectArray = new Object[]{Float.valueOf(v)};
+            String string2 = String.format(string, Arrays.copyOf(objectArray, objectArray.length));
+            Intrinsics.checkNotNullExpressionValue((Object)string2, (String)"format(...)");
+            return string2;
+        }
+        float inc = this.backend.getIncrement();
+        int decimals = 1;
+        if (inc > 0.0f) {
+            float scaled = inc;
+            for (decimals = 0; decimals < 3 && Math.abs(scaled - (float)Math.round(scaled)) > 1.0E-4f; ++decimals) {
+                scaled *= 10.0f;
+            }
+            decimals = Math.max(decimals, 1);
+        }
+        String string = "%." + decimals + "f";
+        Object[] objectArray = new Object[]{Float.valueOf(v)};
+        String string3 = String.format(string, Arrays.copyOf(objectArray, objectArray.length));
+        Intrinsics.checkNotNullExpressionValue((Object)string3, (String)"format(...)");
+        return string3;
+    }
+
+    @Metadata(mv={2, 4, 0}, k=1, xi=48, d1={"\u0000$\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\u0007\n\u0002\b\u0005\n\u0002\u0010\u000b\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\u000e\b\u0086\u0003\u0018\u00002\u00020\u0001B\t\b\u0002\u00a2\u0006\u0004\b\u0002\u0010\u0003J7\u0010\u000b\u001a\u00020\n2\u0006\u0010\u0005\u001a\u00020\u00042\u0006\u0010\u0006\u001a\u00020\u00042\u0006\u0010\u0007\u001a\u00020\u00042\u0006\u0010\b\u001a\u00020\u00042\u0006\u0010\t\u001a\u00020\u0004H\u0002\u00a2\u0006\u0004\b\u000b\u0010\fJ/\u0010\u0012\u001a\u00020\r2\u0006\u0010\u000e\u001a\u00020\r2\u0006\u0010\u000f\u001a\u00020\r2\u0006\u0010\u0010\u001a\u00020\r2\u0006\u0010\u0011\u001a\u00020\u0004H\u0002\u00a2\u0006\u0004\b\u0012\u0010\u0013J\u0017\u0010\u0015\u001a\u00020\u00042\u0006\u0010\u0014\u001a\u00020\u0004H\u0002\u00a2\u0006\u0004\b\u0015\u0010\u0016R\u0014\u0010\u0017\u001a\u00020\u00048\u0006X\u0086T\u00a2\u0006\u0006\n\u0004\b\u0017\u0010\u0018R\u0014\u0010\u0019\u001a\u00020\u00048\u0006X\u0086T\u00a2\u0006\u0006\n\u0004\b\u0019\u0010\u0018R\u0014\u0010\u001a\u001a\u00020\u00048\u0006X\u0086T\u00a2\u0006\u0006\n\u0004\b\u001a\u0010\u0018\u00a8\u0006\u001b"}, d2={"Lrtx/kimiko/api/ui/settings/impl/RangeSliderSetting.Companion;", "", "<init>", "()V", "", "mx", "my", "barX", "barW", "barY", "", "inside", "(FFFFF)Z", "", "r", "g", "b", "a", "rgba", "(IIIF)I", "v", "clamp01", "(F)F", "ROW_H", "F", "BAR_H", "BAR_TOP", "rtx.kimiko:kimiko"})
+    public static final class Companion {
+        private Companion() {
+        }
+
+        private final boolean inside(float mx, float my, float barX, float barW, float barY) {
+            return mx >= barX - (float)4 && mx <= barX + barW + (float)4 && my >= barY - (float)5 && my <= barY + 3.0f + (float)5;
+        }
+
+        private final int rgba(int r, int g, int b, float a) {
+            int alpha = Math.max(0, Math.min(255, Math.round(a)));
+            if (alpha <= 0) {
+                return 0;
+            }
+            return new Color(r, g, b, alpha).getRGB();
+        }
+
+        private final float clamp01(float v) {
+            return v < 0.0f ? 0.0f : (v > 1.0f ? 1.0f : v);
+        }
+
+        public /* synthetic */ Companion(DefaultConstructorMarker $constructor_marker) {
+            this();
+        }
+    }
+}
+

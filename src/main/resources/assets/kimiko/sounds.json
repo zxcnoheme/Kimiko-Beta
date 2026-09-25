@@ -1,0 +1,384 @@
+{
+    "moan1": {
+        "sounds": [
+            "kimiko:hit_sounds/moan1"
+        ]
+    },
+    "moan2": {
+        "sounds": [
+            "kimiko:hit_sounds/moan2"
+        ]
+    },
+    "moan3": {
+        "sounds": [
+            "kimiko:hit_sounds/moan3"
+        ]
+    },
+    "moan4": {
+        "sounds": [
+            "kimiko:hit_sounds/moan4"
+        ]
+    },
+    "module_disable": {
+        "sounds": [
+            "kimiko:module_sounds/off"
+        ]
+    },
+    "module_enable": {
+        "sounds": [
+            "kimiko:module_sounds/on"
+        ]
+    },
+    "off": {
+        "sounds": [
+            "kimiko:module_sounds/off2"
+        ]
+    },
+    "on": {
+        "sounds": [
+            "kimiko:module_sounds/on2"
+        ]
+    },
+    "crime": {
+        "sounds": [
+            "kimiko:hit_sounds/crime"
+        ]
+    },
+    "metallic": {
+        "sounds": [
+            "kimiko:hit_sounds/metallic"
+        ]
+    },
+    "welcome": {
+        "sounds": [
+            "kimiko:other/notification/notif"
+        ]
+    },
+    "notification": {
+        "sounds": [
+            "kimiko:other/notification/notif"
+        ]
+    },
+    "notification_low": {
+        "sounds": [
+            "kimiko:other/notification/low"
+        ]
+    },
+    "player_ping": {
+        "sounds": [
+            "kimiko:other/notification/playerping"
+        ]
+    },
+    "module_enable_type2": {
+        "sounds": [
+            "kimiko:module_sounds/on1"
+        ]
+    },
+    "module_disable_type2": {
+        "sounds": [
+            "kimiko:module_sounds/off1"
+        ]
+    },
+    "toggle1_on": {
+        "sounds": [
+            "kimiko:module_sounds/toggle1_on"
+        ]
+    },
+    "toggle1_off": {
+        "sounds": [
+            "kimiko:module_sounds/toggle1_off"
+        ]
+    },
+    "mine": {
+        "sounds": [
+            "kimiko:other/auto_mine/mine"
+        ]
+    },
+    "accountswitch": {
+        "sounds": [
+            "kimiko:alt_manager/accountswitch"
+        ]
+    },
+    "searchtyping": {
+        "sounds": [
+            "kimiko:clickgui/searchtyping"
+        ]
+    },
+    "slider": {
+        "sounds": [
+            "kimiko:clickgui/slider"
+        ]
+    },
+    "settings_slider": {
+        "sounds": [
+            "kimiko:settings/slider/slider"
+        ]
+    },
+    "select_category": {
+        "sounds": [
+            "kimiko:clickgui/select-category"
+        ]
+    },
+    "open_gui": {
+        "sounds": [
+            "kimiko:clickgui/open-gui"
+        ]
+    },
+    "close_gui": {
+        "sounds": [
+            "kimiko:clickgui/close-gui"
+        ]
+    },
+    "switchcategory": {
+        "sounds": [
+            "kimiko:clickgui/switchcategory"
+        ]
+    },
+    "switch_left": {
+        "sounds": [
+            "kimiko:clickgui/switch-left"
+        ]
+    },
+    "switch_right": {
+        "sounds": [
+            "kimiko:clickgui/switch-right"
+        ]
+    },
+    "module_settings_open": {
+        "sounds": [
+            "kimiko:settings/openmodulesettings/module_settings_open"
+        ]
+    },
+    "module_settings_close": {
+        "sounds": [
+            "kimiko:settings/openmodulesettings/module_settings_close"
+        ]
+    },
+    "settings_open": {
+        "sounds": [
+            "kimiko:clickgui/settings-open"
+        ]
+    },
+    "settings_close": {
+        "sounds": [
+            "kimiko:clickgui/settings-close"
+        ]
+    },
+    "gui_category_select": {
+        "sounds": [
+            "kimiko:clickgui/guicategory_select"
+        ]
+    },
+    "no-settings": {
+        "sounds": [
+            "kimiko:clickgui/no-settings"
+        ]
+    },
+    "buttonclick": {
+        "sounds": [
+            "kimiko:clickgui/buttonclick"
+        ]
+    },
+    "unknowncommand": {
+        "sounds": [
+            "kimiko:commands/unknowncommand"
+        ]
+    },
+    "entity.ribbit.ambient": {
+        "sounds": [
+            "kimiko:entity/ribbit_ambient1",
+            "kimiko:entity/ribbit_ambient2",
+            "kimiko:entity/ribbit_ambient3",
+            "kimiko:entity/ribbit_ambient4",
+            "kimiko:entity/ribbit_ambient5"
+        ]
+    },
+    "entity.ribbit.step": {
+        "sounds": [
+            "kimiko:entity/ribbit_step1",
+            "kimiko:entity/ribbit_step2"
+        ]
+    },
+    "entity.ribbit.hurt": {
+        "sounds": [
+            "kimiko:entity/ribbit_hurt1",
+            "kimiko:entity/ribbit_hurt2",
+            "kimiko:entity/ribbit_hurt3"
+        ]
+    },
+    "entity.ribbit.death": {
+        "sounds": [
+            "kimiko:entity/ribbit_death1",
+            "kimiko:entity/ribbit_death2"
+        ]
+    },
+    "guicategory_select": {
+        "sounds": [
+            "kimiko:clickgui/guicategory_select"
+        ]
+    },
+    "settings-close": {
+        "sounds": [
+            "kimiko:clickgui/settings-close"
+        ]
+    },
+    "settings-open": {
+        "sounds": [
+            "kimiko:clickgui/settings-open"
+        ]
+    },
+    "switch-left": {
+        "sounds": [
+            "kimiko:clickgui/switch-left"
+        ]
+    },
+    "switch-right": {
+        "sounds": [
+            "kimiko:clickgui/switch-right"
+        ]
+    },
+    "ribbit_ambient1": {
+        "sounds": [
+            "kimiko:entity/ribbit_ambient1"
+        ]
+    },
+    "ribbit_ambient2": {
+        "sounds": [
+            "kimiko:entity/ribbit_ambient2"
+        ]
+    },
+    "ribbit_ambient3": {
+        "sounds": [
+            "kimiko:entity/ribbit_ambient3"
+        ]
+    },
+    "ribbit_ambient4": {
+        "sounds": [
+            "kimiko:entity/ribbit_ambient4"
+        ]
+    },
+    "ribbit_ambient5": {
+        "sounds": [
+            "kimiko:entity/ribbit_ambient5"
+        ]
+    },
+    "ribbit_death1": {
+        "sounds": [
+            "kimiko:entity/ribbit_death1"
+        ]
+    },
+    "ribbit_death2": {
+        "sounds": [
+            "kimiko:entity/ribbit_death2"
+        ]
+    },
+    "ribbit_hurt1": {
+        "sounds": [
+            "kimiko:entity/ribbit_hurt1"
+        ]
+    },
+    "ribbit_hurt2": {
+        "sounds": [
+            "kimiko:entity/ribbit_hurt2"
+        ]
+    },
+    "ribbit_hurt3": {
+        "sounds": [
+            "kimiko:entity/ribbit_hurt3"
+        ]
+    },
+    "ribbit_step1": {
+        "sounds": [
+            "kimiko:entity/ribbit_step1"
+        ]
+    },
+    "ribbit_step2": {
+        "sounds": [
+            "kimiko:entity/ribbit_step2"
+        ]
+    },
+    "off1": {
+        "sounds": [
+            "kimiko:module_sounds/off1"
+        ]
+    },
+    "off2": {
+        "sounds": [
+            "kimiko:module_sounds/off2"
+        ]
+    },
+    "on1": {
+        "sounds": [
+            "kimiko:module_sounds/on1"
+        ]
+    },
+    "on2": {
+        "sounds": [
+            "kimiko:module_sounds/on2"
+        ]
+    },
+    "low": {
+        "sounds": [
+            "kimiko:other/notification/low"
+        ]
+    },
+    "notif": {
+        "sounds": [
+            "kimiko:other/notification/notif"
+        ]
+    },
+    "playerping": {
+        "sounds": [
+            "kimiko:other/notification/playerping"
+        ]
+    },
+    "frag_effect_echo_main": {
+        "sounds": [
+            "kimiko:charmsfxpack/echocharmmain"
+        ]
+    },
+    "frag_effect_knock_main": {
+        "sounds": [
+            "kimiko:charmsfxpack/knockcharmmain"
+        ]
+    },
+    "frag_effect_pulse": {
+        "sounds": [
+            "kimiko:charmsfxpack/pulsecharmdistant0",
+            "kimiko:charmsfxpack/pulsecharmdistant1",
+            "kimiko:charmsfxpack/pulsecharmdistant2",
+            "kimiko:charmsfxpack/pulsecharmdistant3",
+            "kimiko:charmsfxpack/pulsecharmdistant4"
+        ]
+    },
+    "frag_effect_sparks_collision": {
+        "sounds": [
+            "kimiko:charmsfxpack/sparkscollisionneared"
+        ]
+    },
+    "command_error": {
+        "sounds": [
+            "kimiko:chat/command-error"
+        ]
+    },
+    "entity.nightmare_bb.hi": {
+        "sounds": [
+            "kimiko:entity/nightmare_bb/hi"
+        ]
+    },
+    "entity.nightmare_bb.hello": {
+        "sounds": [
+            "kimiko:entity/nightmare_bb/hello"
+        ]
+    },
+    "entity.nightmare_bb.laugh": {
+        "sounds": [
+            "kimiko:entity/nightmare_bb/laugh"
+        ]
+    },
+    "wasted": {
+        "sounds": [
+            "kimiko:other/wasted"
+        ]
+    }
+}

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "recovery.privacy.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "SystemDetailsMixin",
+    "GlxMixin",
+    "MetricsMixin",
+    "TelemetryMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
