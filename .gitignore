@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Runtime / game dir
+run/
+runClient.bat
+
+# Logs and machine-specific artifacts
+*.log
+scan_out.txt
+scan_err.txt
+build_out.txt
+hs_err_pid*
+
+# OS
+Thumbs.db
+.DS_Store
