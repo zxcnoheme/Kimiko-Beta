@@ -50,7 +50,15 @@ import rtx.kimiko.api.modules.impl.Interface.ArrayListModule;
 import rtx.kimiko.api.modules.impl.Interface.ClickGui;
 import rtx.kimiko.api.modules.impl.Interface.ComboCounterModule;
 import rtx.kimiko.api.modules.impl.Interface.CritAnnounceModule;
+import rtx.kimiko.api.modules.impl.Interface.BowChargeArcModule;
+import rtx.kimiko.api.modules.impl.Interface.DurabilityWarningModule;
+import rtx.kimiko.api.modules.impl.Interface.ElytraSpeedometerModule;
+import rtx.kimiko.api.modules.impl.Interface.FpsGraphModule;
+import rtx.kimiko.api.modules.impl.Interface.HungerArcModule;
+import rtx.kimiko.api.modules.impl.Interface.LootCounterModule;
 import rtx.kimiko.api.modules.impl.Interface.MinimapModule;
+import rtx.kimiko.api.modules.impl.Interface.OxygenRingModule;
+import rtx.kimiko.api.modules.impl.Interface.SessionStatsModule;
 import rtx.kimiko.api.modules.impl.Interface.TotemCounterModule;
 import rtx.kimiko.api.modules.impl.Interface.WorldStatusModule;
 import rtx.kimiko.api.modules.impl.Interface.CooldownsModule;
@@ -96,11 +104,15 @@ import rtx.kimiko.api.modules.impl.Utils.TapeMouse;
 import rtx.kimiko.api.modules.impl.Utils.VoiceControl;
 import rtx.kimiko.api.modules.impl.Visuals.Ambience;
 import rtx.kimiko.api.modules.impl.Visuals.AspectRatio;
+import rtx.kimiko.api.modules.impl.Utils.CopyCoordsModule;
+import rtx.kimiko.api.modules.impl.Utils.RemindersModule;
 import rtx.kimiko.api.modules.impl.Visuals.BetterMinecraft;
 import rtx.kimiko.api.modules.impl.Visuals.BlobShadowsModule;
 import rtx.kimiko.api.modules.impl.Visuals.BlockShardsModule;
 import rtx.kimiko.api.modules.impl.Visuals.CinematicEntryModule;
+import rtx.kimiko.api.modules.impl.Visuals.CloudShadowsModule;
 import rtx.kimiko.api.modules.impl.Visuals.ColdBreathModule;
+import rtx.kimiko.api.modules.impl.Visuals.DeepStarsModule;
 import rtx.kimiko.api.modules.impl.Visuals.CloudShadowsModule;
 import rtx.kimiko.api.modules.impl.Visuals.DeepStarsModule;
 import rtx.kimiko.api.modules.impl.Visuals.DustMotesModule;
@@ -213,7 +225,7 @@ public final class ModuleManager {
 
     @Protect(value=Level.CROWN)
     public final void init() {
-        Module[] moduleArray = new Module[]{new HitSound(), new AutoSprint(), new Ambience(), new BetterMinecraft(), new AspectRatio(), new ClickGui(), new CustomHotbar(), new FogBlur(), new GlassVapor(), new HitBubbles(), new HpCounter(), new HitColor(), new Hitboxes(), new SelfTag(), new InterfaceModule(), new NotificationsModule(), new WatermarkModule(), new HotKeysModule(), new TargetHudModule(), new PotionsModule(), new MediaPlayerModule(), new MusicBarModule(), new CooldownsModule(), new InfoModule(), new ArrayListModule(), new ArmorModule(), new InventoryModule(), new HPFocus(), new KeyStrokesModule(), new ViewModel(), new Freelook(), new HandSwap(), new VoiceControl(), new CameraSettings(), new ItemPhysics(), new CustomSwords(), new JumpCircle(), new ExplosionWave(), new Crosshair(), new KillEffect(), new ModelCollapse(), new NameTags(), new GlowEsp(), new SeeInvisible(), new ChinaHat(), new Emotions(), new BlockOverlay(), new FakePlayer(), new ShaderHands(), new ItemHighlight(), new LootView(), new NoRender(), new WorldParticles(), new LyricsTextModule(), new HitParticles(), new SelfPredictions(), new ProjectileHelper(), new SwingAnimation(), new TargetESP(), new WastedDeath(), new BrewViewer(), new Trails(), new ShulkerPreview(), new AutoDuel(), new AutoResell(), new AutoTpAccept(), new ClientSounds(), new DeathCoords(), new ClickPearl(), new HolyWorldHelper(), new TalTracker(), new ItemScroller(), new StreamerMode(), new ElytraSwap(), new FastExp(), new AutoSwap(), new AutoCommands(), new TapeMouse(), new CrystalOptimizer(), new Optimization(), new Globals(), new MinimapModule(), new WaypointsModule(), new BlobShadowsModule(), new BlockShardsModule(), new ScorchDecalsModule(), new FirefliesModule(), new FallingLeavesModule(), new ColdBreathModule(), new PortalSparksModule(), new NightComfortModule(), new GoldenHourModule(), new WetGroundModule(), new FootprintsModule(), new PremiumOutlineModule(), new UnderwaterOverlayModule(), new HitPulseModule(), new LowHealthHazeModule(), new DustMotesModule(), new WaterSplashModule(), new WindGustsModule(), new DeepStarsModule(), new CloudShadowsModule(), new FrostOverlayModule(), new MagmaSteamModule(), new MoonGlintModule(), new NetherEmbersModule(), new MorningFogModule(), new CinematicEntryModule(), new SleepFadeModule(), new FallWhistleModule(), new WorldStatusModule(), new TotemCounterModule(), new ComboCounterModule(), new CritAnnounceModule()};
+        Module[] moduleArray = new Module[]{new HitSound(), new AutoSprint(), new Ambience(), new BetterMinecraft(), new AspectRatio(), new ClickGui(), new CustomHotbar(), new FogBlur(), new GlassVapor(), new HitBubbles(), new HpCounter(), new HitColor(), new Hitboxes(), new SelfTag(), new InterfaceModule(), new NotificationsModule(), new WatermarkModule(), new HotKeysModule(), new TargetHudModule(), new PotionsModule(), new MediaPlayerModule(), new MusicBarModule(), new CooldownsModule(), new InfoModule(), new ArrayListModule(), new ArmorModule(), new InventoryModule(), new HPFocus(), new KeyStrokesModule(), new ViewModel(), new Freelook(), new HandSwap(), new VoiceControl(), new CameraSettings(), new ItemPhysics(), new CustomSwords(), new JumpCircle(), new ExplosionWave(), new Crosshair(), new KillEffect(), new ModelCollapse(), new NameTags(), new GlowEsp(), new SeeInvisible(), new ChinaHat(), new Emotions(), new BlockOverlay(), new FakePlayer(), new ShaderHands(), new ItemHighlight(), new LootView(), new NoRender(), new WorldParticles(), new LyricsTextModule(), new HitParticles(), new SelfPredictions(), new ProjectileHelper(), new SwingAnimation(), new TargetESP(), new WastedDeath(), new BrewViewer(), new Trails(), new ShulkerPreview(), new AutoDuel(), new AutoResell(), new AutoTpAccept(), new ClientSounds(), new DeathCoords(), new ClickPearl(), new HolyWorldHelper(), new TalTracker(), new ItemScroller(), new StreamerMode(), new ElytraSwap(), new FastExp(), new AutoSwap(), new AutoCommands(), new TapeMouse(), new CrystalOptimizer(), new Optimization(), new Globals(), new MinimapModule(), new WaypointsModule(), new BlobShadowsModule(), new BlockShardsModule(), new ScorchDecalsModule(), new FirefliesModule(), new FallingLeavesModule(), new ColdBreathModule(), new PortalSparksModule(), new NightComfortModule(), new GoldenHourModule(), new WetGroundModule(), new FootprintsModule(), new PremiumOutlineModule(), new UnderwaterOverlayModule(), new HitPulseModule(), new LowHealthHazeModule(), new DustMotesModule(), new WaterSplashModule(), new WindGustsModule(), new DeepStarsModule(), new CloudShadowsModule(), new FrostOverlayModule(), new MagmaSteamModule(), new MoonGlintModule(), new NetherEmbersModule(), new MorningFogModule(), new CinematicEntryModule(), new SleepFadeModule(), new FallWhistleModule(), new WorldStatusModule(), new TotemCounterModule(), new ComboCounterModule(), new CritAnnounceModule(), new OxygenRingModule(), new HungerArcModule(), new BowChargeArcModule(), new FpsGraphModule(), new ElytraSpeedometerModule(), new SessionStatsModule(), new LootCounterModule(), new DurabilityWarningModule(), new CopyCoordsModule(), new RemindersModule()};
         this.register(moduleArray);
         EventBus.Companion.get().subscribe(this);
         CosmeticSiteState.Companion.get().start();
