@@ -166,6 +166,13 @@ public abstract class LevelRendererMixin {
         }
     }
 
+    @Inject(method={"renderTargetBlockOutline"}, at={@At(value="HEAD")}, cancellable=true, require=0)
+    private void kimiko$premiumBlockOutline(CallbackInfo ci) {
+        if (rtx.kimiko.api.modules.impl.Visuals.PremiumOutlineModule.cancelVanilla()) {
+            ci.cancel();
+        }
+    }
+
     @Inject(method={"pushEntityRenders"}, at={@At(value="HEAD")}, require=0)
     private void kimiko$applySkyBeforeEntities(CallbackInfo ci) {
         if (this.client != null && this.client.world != null) {
