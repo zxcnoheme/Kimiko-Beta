@@ -148,7 +148,8 @@
     "emotions.GuiRendererEmotionPipMixin",
     "MainMenuMixin",
     "SplashMixin",
-    "OptionsScreenMixin"
+    "OptionsScreenMixin",
+    "GameMenuScreenMixin"
   ],
   "injectors": {
     "maxShiftBy": 2,

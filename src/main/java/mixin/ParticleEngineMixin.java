@@ -75,6 +75,13 @@ public abstract class ParticleEngineMixin {
         }
     }
 
+    @Inject(method={"addParticle(Lnet/minecraft/particle/ParticleEffect;DDDDDD)Lnet/minecraft/client/particle/Particle;"}, at={@At(value="HEAD")}, require=0)
+    private void kimiko$blockShards(ParticleEffect options, double x, double y, double z, double vx, double vy, double vz, CallbackInfoReturnable<Particle> cir) {
+        if (options instanceof net.minecraft.particle.BlockStateParticleEffect blockEffect) {
+            rtx.kimiko.api.modules.impl.Visuals.BlockShardsModule.onBlockParticles(blockEffect.getBlockState(), x, y, z);
+        }
+    }
+
     private static boolean kimiko$noParticles() {
         return NoRender.isActive("Частицы");
     }
