@@ -81,7 +81,7 @@ import rtx.kimiko.api.modules.impl.Visuals.HitColor;
 import rtx.kimiko.api.modules.impl.Visuals.NameTags;
 import rtx.kimiko.api.modules.impl.Visuals.SeeInvisible;
 import rtx.kimiko.api.modules.impl.Visuals.SelfTag;
-import rtx.kimiko.api.modules.impl.Visuals.customization.CustomizationLayer;
+import rtx.kimiko.api.modules.impl.Visuals.customization.CosmeticLayer;
 import rtx.kimiko.api.modules.impl.Visuals.seeinvisible.RevealTintHolder;
 import rtx.kimiko.utils.net.ClientPresence;
 
@@ -103,7 +103,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     private void kimiko$addCustomizationLayer(EntityRendererFactory.Context context, EntityModel<?> model, float shadowRadius, CallbackInfo ci) {
         if ((Object)this instanceof PlayerEntityRenderer) {
             PlayerEntityRenderer renderer = (PlayerEntityRenderer)(Object)this;
-            this.addFeature(new CustomizationLayer(renderer));
+            this.addFeature(new CosmeticLayer(renderer));
         }
     }
 

@@ -53,6 +53,9 @@ import rtx.kimiko.api.events.impl.player.AttackEntityEvent;
 import rtx.kimiko.api.modules.Category;
 import rtx.kimiko.api.modules.Module;
 import rtx.kimiko.api.modules.ModuleManager;
+import rtx.kimiko.api.modules.settings.Setting;
+import rtx.kimiko.api.modules.settings.impl.BooleanSetting;
+import rtx.kimiko.api.modules.settings.impl.ModeSetting;
 import rtx.kimiko.api.modules.impl.Visuals.cosmetics.CosmeticSiteState;
 import rtx.kimiko.api.modules.impl.Visuals.custompet.CustomPetVariant;
 import rtx.kimiko.api.modules.impl.Visuals.custompet.control.CustomPetFollowerController;
@@ -112,6 +115,10 @@ extends Module {
     private boolean lastPublishedUmbrella;
     private boolean lastPublishedAirborne;
     private double lastPublishedAnimationSpeed = 1.0;
+    @NotNull
+    private final BooleanSetting offlineMode = (BooleanSetting)this.register((Setting)new BooleanSetting("Офлайн режим", "Не подключаться к серверу синхронизации, использовать локальный выбор.", true));
+    @NotNull
+    private final ModeSetting petKind = (ModeSetting)this.register((Setting)new ModeSetting("Питомец", "Локальный питомец в офлайн режиме.", "Выкл", "Выкл", "frog", "robot", "owl", "chekushka", "goat", "nightmare_bb", "ufo"));
     private static final long CONNECT_RETRY_MS = 5000L;
     private static final long SHARED_STATE_PUSH_MS = 80L;
     private static final long SHARED_HEARTBEAT_MS = 1000L;
@@ -156,7 +163,7 @@ extends Module {
         if (this.petPathBroken) {
             return;
         }
-        if (((CharSequence)CustomPet.Companion.site().petKind()).length() == 0) {
+        if (((CharSequence)this.effectivePetKind()).length() == 0) {
             this.localController.reset();
             try {
                 this.tickRemotePets();
@@ -393,6 +400,13 @@ extends Module {
     @Protect(value=Level.STD)
     private final void tickSync(CustomPetVariant selectedVariant) {
         boolean shouldPush;
+        if (this.offlineMode.getValue()) {
+            if (this.syncClient.isConnected() || this.syncClient.isConnecting()) {
+                this.syncClient.disconnect("offline");
+            }
+            this.clearRemotePets();
+            return;
+        }
         String profileUsername = this.resolveProfileUsername();
         String minecraftUsername = this.resolveMinecraftUsername();
         if (StringsKt.isBlank((CharSequence)profileUsername) || StringsKt.isBlank((CharSequence)minecraftUsername)) {
@@ -675,31 +689,37 @@ extends Module {
 
     @Protect(value=Level.MAX)
     private final CustomPetVariant getSelectedVariant() {
-        return Intrinsics.areEqual((Object)"robot", (Object)CustomPet.Companion.site().petKind()) ? CustomPetVariant.ROBOT : CustomPetVariant.NITWIT;
+        return Intrinsics.areEqual((Object)"robot", (Object)this.effectivePetKind()) ? CustomPetVariant.ROBOT : CustomPetVariant.NITWIT;
     }
 
     private final boolean isOwlSelected() {
-        return Intrinsics.areEqual((Object)"owl", (Object)CustomPet.Companion.site().petKind());
+        return Intrinsics.areEqual((Object)"owl", (Object)this.effectivePetKind());
     }
 
     private final boolean isChekushkaSelected() {
-        return Intrinsics.areEqual((Object)"chekushka", (Object)CustomPet.Companion.site().petKind());
+        return Intrinsics.areEqual((Object)"chekushka", (Object)this.effectivePetKind());
     }
 
     private final boolean isGoatSelected() {
-        return Intrinsics.areEqual((Object)"goat", (Object)CustomPet.Companion.site().petKind());
+        return Intrinsics.areEqual((Object)"goat", (Object)this.effectivePetKind());
     }
 
     private final boolean isNightmareBbSelected() {
-        return Intrinsics.areEqual((Object)"nightmare_bb", (Object)CustomPet.Companion.site().petKind());
+        return Intrinsics.areEqual((Object)"nightmare_bb", (Object)this.effectivePetKind());
     }
 
     private final boolean isUfoSelected() {
-        return Intrinsics.areEqual((Object)"ufo", (Object)CustomPet.Companion.site().petKind());
+        return Intrinsics.areEqual((Object)"ufo", (Object)this.effectivePetKind());
+    }
+
+    @NotNull
+    private final String effectivePetKind() {
+        // питомец выбирается во вкладке Cosmetic клик-гуи (CosmeticSettings)
+        return rtx.kimiko.api.modules.impl.Visuals.cosmetics.CosmeticSettings.get().petId();
     }
 
     private final String getSelectedPetKind() {
-        String kind = CustomPet.Companion.site().petKind();
+        String kind = this.effectivePetKind();
         return ((CharSequence)kind).length() == 0 ? "frog" : kind;
     }
 

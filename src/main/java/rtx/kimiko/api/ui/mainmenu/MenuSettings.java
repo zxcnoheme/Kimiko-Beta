@@ -59,6 +59,14 @@ public final class MenuSettings {
     private static boolean introValue;
     @NotNull
     private static String lastTabValue;
+    private static float uiScaleValue;
+    @NotNull
+    private static String interfaceLookValue;
+    @NotNull
+    private static String buttonLayoutValue;
+    private static float primaryAccentValue;
+    private static float glassDensityValue;
+    private static float buttonRadiusTValue;
     private static boolean loaded;
     private static boolean dirty;
 
@@ -207,6 +215,109 @@ public final class MenuSettings {
         dirty = true;
     }
 
+    /** Множитель масштаба интерфейса меню (0.75..1.5, 1.0 = как раньше). */
+    @JvmStatic
+    public static final float uiScale() {
+        INSTANCE.load();
+        return uiScaleValue;
+    }
+
+    @JvmStatic
+    public static final void setUiScale(float value) {
+        INSTANCE.load();
+        uiScaleValue = value < 0.75f ? 0.75f : (value > 1.5f ? 1.5f : value);
+        dirty = true;
+    }
+
+    /** Вид интерфейса: «usual» (обычный) или «glass» (Liquid glass). */
+    @JvmStatic
+    @NotNull
+    public static final String interfaceLook() {
+        INSTANCE.load();
+        return interfaceLookValue;
+    }
+
+    @JvmStatic
+    public static final boolean liquidGlass() {
+        return "glass".equals(interfaceLook());
+    }
+
+    @JvmStatic
+    public static final void setInterfaceLook(@Nullable String value) {
+        INSTANCE.load();
+        String next = value != null && value.equals("glass") ? "glass" : "usual";
+        if (Intrinsics.areEqual((Object)next, (Object)interfaceLookValue)) {
+            return;
+        }
+        interfaceLookValue = next;
+        dirty = true;
+    }
+
+    /** Положение кнопок главного меню: «left» / «center» / «right». */
+    @JvmStatic
+    @NotNull
+    public static final String buttonLayout() {
+        INSTANCE.load();
+        return buttonLayoutValue;
+    }
+
+    @JvmStatic
+    public static final void setButtonLayout(@Nullable String value) {
+        INSTANCE.load();
+        String next = value != null && (value.equals("center") || value.equals("right")) ? value : "left";
+        if (Intrinsics.areEqual((Object)next, (Object)buttonLayoutValue)) {
+            return;
+        }
+        buttonLayoutValue = next;
+        dirty = true;
+    }
+
+    @JvmStatic
+    public static final float primaryAccent() {
+        INSTANCE.load();
+        return primaryAccentValue;
+    }
+
+    @JvmStatic
+    public static final void setPrimaryAccent(float value) {
+        INSTANCE.load();
+        primaryAccentValue = INSTANCE.clamp(value);
+        dirty = true;
+    }
+
+    @JvmStatic
+    public static final float glassDensity() {
+        INSTANCE.load();
+        return glassDensityValue;
+    }
+
+    @JvmStatic
+    public static final void setGlassDensity(float value) {
+        INSTANCE.load();
+        glassDensityValue = INSTANCE.clamp(value);
+        dirty = true;
+    }
+
+    @JvmStatic
+    public static final float buttonRadiusT() {
+        INSTANCE.load();
+        return buttonRadiusTValue;
+    }
+
+    @JvmStatic
+    public static final void setButtonRadiusT(float value) {
+        INSTANCE.load();
+        buttonRadiusTValue = INSTANCE.clamp(value);
+        dirty = true;
+    }
+
+    /** Радиус углов стеклянных кнопок в пикселях: ползунок 0..1 → 6..10. */
+    @JvmStatic
+    public static final float buttonRadius() {
+        INSTANCE.load();
+        return 6.0f + buttonRadiusTValue * 4.0f;
+    }
+
     @JvmStatic
     public static final void save() {
         if (!dirty) {
@@ -224,6 +335,12 @@ public final class MenuSettings {
         root.addProperty("atmosphere", atmosphereValue.name());
         root.addProperty("intro", Boolean.valueOf(introValue));
         root.addProperty("lastTab", lastTabValue);
+        root.addProperty("uiScale", (Number)Float.valueOf(uiScaleValue));
+        root.addProperty("interfaceLook", interfaceLookValue);
+        root.addProperty("buttonLayout", buttonLayoutValue);
+        root.addProperty("primaryAccent", (Number)Float.valueOf(primaryAccentValue));
+        root.addProperty("glassDensity", (Number)Float.valueOf(glassDensityValue));
+        root.addProperty("buttonRadius", (Number)Float.valueOf(buttonRadiusTValue));
         String json = GSON.toJson((JsonElement)root);
         Thread thread = new Thread(() -> MenuSettings.save$lambda$0(json), "kimiko-menu-settings");
         thread.setDaemon(true);
@@ -272,6 +389,27 @@ public final class MenuSettings {
                 Intrinsics.checkNotNullExpressionValue((Object)string, (String)"getAsString(...)");
                 lastTabValue = string;
             }
+            if (root.has("uiScale")) {
+                float scale = root.get("uiScale").getAsFloat();
+                uiScaleValue = scale < 0.75f ? 0.75f : (scale > 1.5f ? 1.5f : scale);
+            }
+            if (root.has("interfaceLook")) {
+                String look = root.get("interfaceLook").getAsString();
+                interfaceLookValue = look.equals("glass") ? "glass" : "usual";
+            }
+            if (root.has("buttonLayout")) {
+                String layout = root.get("buttonLayout").getAsString();
+                buttonLayoutValue = layout.equals("center") || layout.equals("right") ? layout : "left";
+            }
+            if (root.has("primaryAccent")) {
+                primaryAccentValue = this.clamp(root.get("primaryAccent").getAsFloat());
+            }
+            if (root.has("glassDensity")) {
+                glassDensityValue = this.clamp(root.get("glassDensity").getAsFloat());
+            }
+            if (root.has("buttonRadius")) {
+                buttonRadiusTValue = this.clamp(root.get("buttonRadius").getAsFloat());
+            }
             if (root.has("atmosphere")) {
                 try {
                     String string = root.get("atmosphere").getAsString();
@@ -311,7 +449,7 @@ public final class MenuSettings {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Intrinsics.checkNotNullExpressionValue((Object)gson, (String)"create(...)");
         GSON = gson;
-        backgroundIdValue = "castle_night";
+        backgroundIdValue = "kimiko";
         blurValue = 0.58f;
         dimValue = 0.5f;
         vignetteValue = 0.55f;
@@ -321,6 +459,12 @@ public final class MenuSettings {
         atmosphereValue = Atmosphere.DUST;
         introValue = true;
         lastTabValue = "PLAY";
+        uiScaleValue = 1.0f;
+        interfaceLookValue = "usual";
+        buttonLayoutValue = "left";
+        primaryAccentValue = 0.5f;
+        glassDensityValue = 0.5f;
+        buttonRadiusTValue = 0.5f;
     }
 
     @Metadata(mv={2, 4, 0}, k=1, xi=48, d1={"\u0000\u0010\n\u0002\u0018\u0002\n\u0002\u0010\u0010\n\u0002\u0010\u000e\n\u0002\b\u000b\b\u0086\u0081\u0002\u0018\u00002\b\u0012\u0004\u0012\u00020\u00000\u0001B\u0011\b\u0002\u0012\u0006\u0010\u0003\u001a\u00020\u0002\u00a2\u0006\u0004\b\u0004\u0010\u0005J\r\u0010\u0006\u001a\u00020\u0002\u00a2\u0006\u0004\b\u0006\u0010\u0007R\u0014\u0010\u0003\u001a\u00020\u00028\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0003\u0010\bj\u0002\b\tj\u0002\b\nj\u0002\b\u000bj\u0002\b\f\u00a8\u0006\r"}, d2={"Lrtx/kimiko/api/ui/mainmenu/MenuSettings$Atmosphere;", "", "", "ru", "<init>", "(Ljava/lang/String;ILjava/lang/String;)V", "label", "()Ljava/lang/String;", "Ljava/lang/String;", "NONE", "DUST", "RAIN", "SPARKS", "rtx.kimiko:kimiko"})

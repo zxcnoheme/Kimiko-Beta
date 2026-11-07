@@ -26,6 +26,8 @@
     "TitleScreenAccountSwitcherMixin",
     "BiomeWeatherMixin",
     "ChatScreenMixin",
+    "skins.SkinProviderMixin",
+    "skins.AbstractTextureAccessor",
     "ClientLevelAmbienceMixin",
     "ClientPacketListenerMixin",
     "EntityMixin",
@@ -143,7 +145,9 @@
     "emotions.AvatarRendererEmotionMixin",
     "emotions.HumanoidModelEmotionMixin",
     "emotions.PictureInPictureRendererAccessor",
-    "emotions.GuiRendererEmotionPipMixin"
+    "emotions.GuiRendererEmotionPipMixin",
+    "MainMenuMixin",
+    "SplashMixin"
   ],
   "injectors": {
     "maxShiftBy": 2,

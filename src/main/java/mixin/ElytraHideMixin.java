@@ -29,7 +29,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import rtx.kimiko.api.modules.impl.Visuals.Customization;
 
 @Mixin(value={ElytraFeatureRenderer.class})
 public abstract class ElytraHideMixin {
@@ -40,16 +39,12 @@ public abstract class ElytraHideMixin {
             return;
         }
         PlayerEntityRenderState avatarState = (PlayerEntityRenderState)state;
-        Customization customization = Customization.getInstance();
-        if (customization == null) {
-            return;
-        }
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.world == null) {
             return;
         }
         Entity entity = mc.world.getEntityById(avatarState.id);
-        if (entity instanceof AbstractClientPlayerEntity && customization.wingsEnabledFor(player = (AbstractClientPlayerEntity)entity)) {
+        if (entity instanceof AbstractClientPlayerEntity && rtx.kimiko.api.modules.impl.Visuals.cosmetics.CosmeticSettings.wingsActiveFor((AbstractClientPlayerEntity)entity)) {
             ci.cancel();
         }
     }

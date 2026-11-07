@@ -53,6 +53,8 @@ public abstract class GuiRendererEmotionPipMixin {
         HashMap extended = new HashMap(this.specialElementRenderers);
         extended.put(EmotionPreviewState.class, new EmotionPreviewRenderer(bufferSource));
         extended.put(HotbarItemPipState.class, new HotbarItemPipRenderer(bufferSource));
+        extended.put(rtx.kimiko.api.modules.impl.Visuals.cosmetics.CosmeticPreviewState.class,
+                new rtx.kimiko.api.modules.impl.Visuals.cosmetics.CosmeticPreviewRenderer(bufferSource));
         this.specialElementRenderers = extended;
     }
 }

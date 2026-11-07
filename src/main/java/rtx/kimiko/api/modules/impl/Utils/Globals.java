@@ -62,7 +62,6 @@ extends Module {
 
     @Override
     protected void onEnable() {
-        ClientPresence.INSTANCE.start();
     }
 
     @Override

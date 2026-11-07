@@ -81,6 +81,8 @@ extends Module {
     private final BooleanSetting thirdPerson;
     @NotNull
     private final BooleanSetting stopOnMove;
+    @NotNull
+    private final BooleanSetting offlineMode;
     @Nullable
     private Perspective previousCamera;
     @NotNull
@@ -108,6 +110,7 @@ extends Module {
         this.looping = (BooleanSetting)this.register((Setting)new BooleanSetting("Зациклить", "Проигрывать эмоцию по кругу, пока её не остановят.", true));
         this.thirdPerson = (BooleanSetting)this.register((Setting)new BooleanSetting("Вид от третьего лица", "Переключать камеру, пока проигрывается эмоция.", true));
         this.stopOnMove = (BooleanSetting)this.register((Setting)new BooleanSetting("Прерывать при движении", "Останавливать эмоцию при ходьбе, прыжке или атаке.", true));
+        this.offlineMode = (BooleanSetting)this.register((Setting)new BooleanSetting("Офлайн режим", "Не подключаться к серверу синхронизации эмоций.", true));
         this.sync = new EmotionSyncClient();
         INSTANCE = this;
     }
@@ -169,7 +172,14 @@ extends Module {
         EmotionPlayback.setSpeed(this.speed.getFloat());
         EmotionPlayback.setLooping(this.looping.getValue());
         EmotionPlayback.update();
-        this.tickSync();
+        if (this.offlineMode.getValue()) {
+            if (this.sync.isConnected() || this.sync.isConnecting()) {
+                this.sync.disconnect();
+            }
+            EmotionPlayback.clearRemote();
+        } else {
+            this.tickSync();
+        }
         if (this.mc.currentScreen == null && this.isMenuKeyDown() && !((Collection)(wheel = this.wheel())).isEmpty()) {
             this.mc.setScreen((Screen)new EmotionWheelScreen(this, wheel));
         }

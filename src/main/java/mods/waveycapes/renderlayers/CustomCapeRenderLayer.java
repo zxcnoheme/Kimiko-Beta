@@ -26,7 +26,6 @@ import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import rtx.kimiko.api.modules.impl.Visuals.Customization;
 
 public class CustomCapeRenderLayer
 extends FeatureRenderer<PlayerEntityRenderState, PlayerEntityModel> {
@@ -48,8 +47,7 @@ extends FeatureRenderer<PlayerEntityRenderState, PlayerEntityModel> {
         MinecraftClient mc = MinecraftClient.getInstance();
         if (mc.world != null && (entity = mc.world.getEntityById(renderState.id)) instanceof AbstractClientPlayerEntity) {
             AbstractClientPlayerEntity player = (AbstractClientPlayerEntity)entity;
-            Customization customization = Customization.getInstance();
-            if (customization != null && customization.wingsEnabledFor(player)) {
+            if (rtx.kimiko.api.modules.impl.Visuals.cosmetics.CosmeticSettings.wingsActiveFor(player)) {
                 return;
             }
         }

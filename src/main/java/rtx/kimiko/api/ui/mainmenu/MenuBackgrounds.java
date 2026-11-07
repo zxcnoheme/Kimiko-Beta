@@ -133,6 +133,18 @@ public final class MenuBackgrounds {
         INSTANCE.scan();
     }
 
+    /** Запускает фоновую предзагрузку превью всех фонов (асинхронно, без фризов). */
+    @JvmStatic
+    public static final void preload() {
+        INSTANCE.ensure();
+        Iterator<MenuBackground> iterator = REGISTRY.values().iterator();
+        while (iterator.hasNext()) {
+            MenuBackground background = (MenuBackground) (iterator.next());
+            if (background.procedural() || background.failed() || background.ready()) continue;
+            background.preview();
+        }
+    }
+
     private final void ensure() {
         if (!initialised) {
             initialised = true;
@@ -142,9 +154,22 @@ public final class MenuBackgrounds {
     }
 
     private final void registerBuiltIn() {
-        this.add(new MenuBackground("castle_night", "Ночной замок", MenuBackground.Kind.IMAGE, "kimiko:images/mainmenu/background.png", true));
-        this.add(new MenuBackground("castle_storm", "Гроза над замком", MenuBackground.Kind.IMAGE, "kimiko:images/mainmenu/singleplayer.png", true));
-        this.add(new MenuBackground("castle_gates", "Врата", MenuBackground.Kind.IMAGE, "kimiko:images/mainmenu/multiplayer.png", true));
+        this.add(new MenuBackground("storm", "Молния", MenuBackground.Kind.GRADIENT, "style:storm", true));
+        this.add(new MenuBackground("orbit", "Орбиты", MenuBackground.Kind.GRADIENT, "style:orbit", true));
+        this.add(new MenuBackground("portal", "Портал", MenuBackground.Kind.GRADIENT, "style:portal", true));
+        this.add(new MenuBackground("rain", "Дождь", MenuBackground.Kind.GRADIENT, "style:rain", true));
+        this.add(new MenuBackground("warp", "Скорость", MenuBackground.Kind.GRADIENT, "style:warp", true));
+        this.add(new MenuBackground("fluid", "Жидкость", MenuBackground.Kind.GRADIENT, "style:fluid", true));
+        this.add(new MenuBackground("grid", "Сетка", MenuBackground.Kind.GRADIENT, "style:grid", true));
+        this.add(new MenuBackground("bubbles", "Пузыри", MenuBackground.Kind.GRADIENT, "style:bubbles", true));
+        this.add(new MenuBackground("streaks", "Кометы", MenuBackground.Kind.GRADIENT, "style:streaks", true));
+        this.add(new MenuBackground("ripples", "Рябь", MenuBackground.Kind.GRADIENT, "style:ripples", true));
+        this.add(new MenuBackground("nebula", "Туманность", MenuBackground.Kind.GRADIENT, "style:nebula", true));
+        this.add(new MenuBackground("matrix", "Код", MenuBackground.Kind.GRADIENT, "style:matrix", true));
+        this.add(new MenuBackground("fireflies", "Светлячки", MenuBackground.Kind.GRADIENT, "style:fireflies", true));
+        this.add(new MenuBackground("abyss", "Бездна", MenuBackground.Kind.GRADIENT, "style:abyss", true));
+        this.add(new MenuBackground("lava", "Магма", MenuBackground.Kind.GRADIENT, "style:lava", true));
+        this.add(new MenuBackground("kimiko", "Kimiko", MenuBackground.Kind.IMAGE, "kimiko:textures/menu/menu.png", true));
         this.add(new MenuBackground("aurora", "Аврора", MenuBackground.Kind.AURORA, "", true));
         this.add(new MenuBackground("gradient", "Глубина", MenuBackground.Kind.GRADIENT, "", true));
     }
@@ -183,7 +208,7 @@ public final class MenuBackgrounds {
             String id = "user:" + file.getFileName();
             present.add(id);
             if (REGISTRY.containsKey(id)) continue;
-            String name = this.stripExtension(file.getFileName().toString());
+            String name = this.translateName(this.stripExtension(file.getFileName().toString()));
             REGISTRY.put(id, new MenuBackground(id, name, MenuBackground.Kind.USER, file.toAbsolutePath().toString(), false));
         }
         REGISTRY.entrySet().removeIf(it -> !it.getValue().builtIn() && !present.contains(it.getKey()));
@@ -207,11 +232,142 @@ public final class MenuBackgrounds {
         return name.substring(0, dot);
     }
 
+    /** Переводит имя файла фона на русский: точные совпадения + пословный словарь как запасной вариант. */
+    private final String translateName(String raw) {
+        if (raw == null || raw.isEmpty()) {
+            return raw;
+        }
+        String key = raw.toLowerCase(Locale.ROOT).replaceAll("[\\s_+.]+", "-");
+        String full = NAMES_RU.get(key);
+        if (full != null) {
+            return full;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (String part : key.split("-")) {
+            if (part.isEmpty()) {
+                continue;
+            }
+            String ru = WORDS_RU.get(part);
+            sb.append(ru == null ? part : ru).append(' ');
+        }
+        String joined = sb.toString().trim();
+        if (joined.isEmpty()) {
+            return raw;
+        }
+        return Character.toUpperCase(joined.charAt(0)) + joined.substring(1);
+    }
+
+    private static final Map<String, String> NAMES_RU;
+    private static final Map<String, String> WORDS_RU;
+
+    private static void putRu(Map<String, String> map, String key, String value) {
+        map.put(key, value);
+    }
+
     static {
         String[] stringArray = new String[]{".png", ".jpg", ".jpeg"};
         EXTENSIONS = stringArray;
         REGISTRY = new LinkedHashMap();
         BUILT_IN = new ArrayList();
+
+        Map<String, String> names = new LinkedHashMap();
+        putRu(names, "ancient-blue-hall", "Древний синий зал");
+        putRu(names, "astral-forest", "Астральный лес");
+        putRu(names, "autumn-lake", "Осеннее озеро");
+        putRu(names, "blossom-city", "Цветущий город");
+        putRu(names, "blue-cavern", "Синяя пещера");
+        putRu(names, "castle-garden", "Сад замка");
+        putRu(names, "cave-lanterns", "Пещера фонарей");
+        putRu(names, "cavern-wheel", "Колесо в пещере");
+        putRu(names, "chain-cavern", "Цепная пещера");
+        putRu(names, "cherry-village", "Вишнёвая деревня");
+        putRu(names, "crimson-arcade", "Багровая аркада");
+        putRu(names, "crystal-tree", "Кристальное дерево");
+        putRu(names, "deep-cavern", "Глубокая пещера");
+        putRu(names, "ember-cavern", "Тлеющая пещера");
+        putRu(names, "enchanted-lake", "Волшебное озеро");
+        putRu(names, "fire-temple", "Огненный храм");
+        putRu(names, "floating-islands", "Парящие острова");
+        putRu(names, "glowing-cavern", "Сияющая пещера");
+        putRu(names, "golden-street", "Золотая улица");
+        putRu(names, "lantern-gate", "Врата фонарей");
+        putRu(names, "launcher-blue-cavern", "Синяя пещера лаунчера");
+        putRu(names, "market-arcade", "Рыночная аркада");
+        putRu(names, "modern-villa-day", "Современная вилла днём");
+        putRu(names, "modern-villa-rain", "Современная вилла в дождь");
+        putRu(names, "modern-villa-sunrise", "Современная вилла на рассвете");
+        putRu(names, "moonlit-pavilion", "Лунный павильон");
+        putRu(names, "mountain-lake", "Горное озеро");
+        putRu(names, "nether-portal-hall", "Зал нижнего портала");
+        putRu(names, "riverside-house", "Дом у реки");
+        putRu(names, "sunrise-pagoda-lake", "Озеро с пагодой на рассвете");
+        putRu(names, "sunrise-pagoda", "Пагода на рассвете");
+        putRu(names, "sunset-fantasy-village", "Деревня фэнтези на закате");
+        putRu(names, "sunset-ruins", "Руины на закате");
+        putRu(names, "village-workshop", "Деревенская мастерская");
+        putRu(names, "white-city", "Белый город");
+        putRu(names, "winter-pagoda", "Зимняя пагода");
+        NAMES_RU = names;
+
+        Map<String, String> words = new LinkedHashMap();
+        putRu(words, "ancient", "древний");
+        putRu(words, "astral", "астральный");
+        putRu(words, "autumn", "осенний");
+        putRu(words, "blossom", "цветущий");
+        putRu(words, "blue", "синий");
+        putRu(words, "cave", "пещера");
+        putRu(words, "cavern", "пещера");
+        putRu(words, "castle", "замок");
+        putRu(words, "chain", "цепной");
+        putRu(words, "cherry", "вишнёвый");
+        putRu(words, "city", "город");
+        putRu(words, "crimson", "багровый");
+        putRu(words, "crystal", "кристальный");
+        putRu(words, "day", "день");
+        putRu(words, "deep", "глубокий");
+        putRu(words, "ember", "тлеющий");
+        putRu(words, "enchanted", "волшебный");
+        putRu(words, "fantasy", "фэнтези");
+        putRu(words, "fire", "огненный");
+        putRu(words, "floating", "парящий");
+        putRu(words, "forest", "лес");
+        putRu(words, "garden", "сад");
+        putRu(words, "gate", "врата");
+        putRu(words, "glowing", "сияющий");
+        putRu(words, "golden", "золотой");
+        putRu(words, "hall", "зал");
+        putRu(words, "house", "дом");
+        putRu(words, "islands", "острова");
+        putRu(words, "lake", "озеро");
+        putRu(words, "lantern", "фонарь");
+        putRu(words, "lanterns", "фонари");
+        putRu(words, "launcher", "лаунчер");
+        putRu(words, "market", "рынок");
+        putRu(words, "modern", "современный");
+        putRu(words, "moonlit", "лунный");
+        putRu(words, "mountain", "горный");
+        putRu(words, "nether", "нижний");
+        putRu(words, "night", "ночь");
+        putRu(words, "pagoda", "пагода");
+        putRu(words, "pavilion", "павильон");
+        putRu(words, "portal", "портал");
+        putRu(words, "rain", "дождь");
+        putRu(words, "river", "река");
+        putRu(words, "riverside", "приречной");
+        putRu(words, "ruins", "руины");
+        putRu(words, "sea", "море");
+        putRu(words, "snowy", "снежный");
+        putRu(words, "street", "улица");
+        putRu(words, "sunrise", "рассвет");
+        putRu(words, "sunset", "закат");
+        putRu(words, "temple", "храм");
+        putRu(words, "tree", "дерево");
+        putRu(words, "villa", "вилла");
+        putRu(words, "village", "деревня");
+        putRu(words, "white", "белый");
+        putRu(words, "winter", "зимний");
+        putRu(words, "workshop", "мастерская");
+        WORDS_RU = words;
     }
 }
 

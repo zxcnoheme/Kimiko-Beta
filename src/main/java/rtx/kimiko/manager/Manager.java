@@ -84,10 +84,7 @@ public final class Manager {
         CommandManager.Companion.get().init();
         MacroHandler.Companion.init();
         DragSystem.Companion.get().init();
-        FunTimeEventsClient.INSTANCE.start();
         SoundManager.init();
-        LiteApiClient.INSTANCE.start();
-        ClientPresence.INSTANCE.start();
         ClientLifecycleEvents.CLIENT_STOPPING.register(Manager::init$lambda$0);
         WaveyCapesMod.INSTANCE.init();
         ShulkerViewMod.init();

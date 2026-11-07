@@ -372,8 +372,10 @@ implements AutoCloseable {
             capture.regionH = region.getHeight();
             GpuTextureView gpuTextureView = result.getColorAttachmentView();
             Intrinsics.checkNotNull((Object)gpuTextureView);
-            Intrinsics.checkNotNullExpressionValue((Object)TextureSetup.of((GpuTextureView)gpuTextureView, (GpuSampler)sampler), (String)"singleTexture(...)");
-            capture.setup = capture.setup;
+            TextureSetup textureSetup3 = TextureSetup.of((GpuTextureView)gpuTextureView, (GpuSampler)sampler);
+            Intrinsics.checkNotNullExpressionValue((Object)textureSetup3, (String)"singleTexture(...)");
+            TextureSetup resultSetup = textureSetup3;
+            capture.setup = resultSetup;
             GpuTextureView gpuTextureView5 = result.getColorAttachmentView();
             Intrinsics.checkNotNull((Object)gpuTextureView5);
             capture.bindBackdrop(gpuTextureView5, sampler);

@@ -21,7 +21,8 @@ public enum Category {
     UTILS("Utils"),
     EVENTS("Events"),
     CONFIGS("Configs"),
-    THEMES("Themes");
+    THEMES("Themes"),
+    COSMETICS("Cosmetic");
 
     @NotNull
     private final String displayName;

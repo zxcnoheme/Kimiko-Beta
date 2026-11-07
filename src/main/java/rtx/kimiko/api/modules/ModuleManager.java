@@ -97,7 +97,6 @@ import rtx.kimiko.api.modules.impl.Visuals.ChinaHat;
 import rtx.kimiko.api.modules.impl.Visuals.Crosshair;
 import rtx.kimiko.api.modules.impl.Visuals.CustomPet;
 import rtx.kimiko.api.modules.impl.Visuals.CustomSwords;
-import rtx.kimiko.api.modules.impl.Visuals.Customization;
 import rtx.kimiko.api.modules.impl.Visuals.Emotions;
 import rtx.kimiko.api.modules.impl.Visuals.ExplosionWave;
 import rtx.kimiko.api.modules.impl.Visuals.FakePlayer;
@@ -180,12 +179,11 @@ public final class ModuleManager {
 
     @Protect(value=Level.CROWN)
     public final void init() {
-        Module[] moduleArray = new Module[]{new HitSound(), new AutoSprint(), new Ambience(), new BetterMinecraft(), new AspectRatio(), new ClickGui(), new CustomHotbar(), new FogBlur(), new GlassVapor(), new HitBubbles(), new HpCounter(), new HitColor(), new Hitboxes(), new SelfTag(), new InterfaceModule(), new NotificationsModule(), new WatermarkModule(), new HotKeysModule(), new TargetHudModule(), new PotionsModule(), new MediaPlayerModule(), new MusicBarModule(), new CooldownsModule(), new InfoModule(), new ArrayListModule(), new ArmorModule(), new InventoryModule(), new HPFocus(), new KeyStrokesModule(), new ViewModel(), new Freelook(), new HandSwap(), new VoiceControl(), new CameraSettings(), new ItemPhysics(), new CustomSwords(), new JumpCircle(), new ExplosionWave(), new Crosshair(), new KillEffect(), new ModelCollapse(), new NameTags(), new GlowEsp(), new SeeInvisible(), new ChinaHat(), new Emotions(), new BlockOverlay(), new FakePlayer(), new ShaderHands(), new ItemHighlight(), new LootView(), new NoRender(), new WorldParticles(), new LyricsTextModule(), new HitParticles(), new SelfPredictions(), new ProjectileHelper(), new SwingAnimation(), new TargetESP(), new WastedDeath(), new PortalLive(), new BrewViewer(), new Trails(), new ShulkerPreview(), new AutoDuel(), new AutoResell(), new AutoTpAccept(), new ClientSounds(), new DeathCoords(), new ClickPearl(), new HolyWorldHelper(), new TalTracker(), new ItemScroller(), new StreamerMode(), new ElytraSwap(), new FastExp(), new AutoSwap(), new AutoCommands(), new TapeMouse(), new CrystalOptimizer(), new Optimization(), new Party(), new Cards(), new Globals()};
+        Module[] moduleArray = new Module[]{new HitSound(), new AutoSprint(), new Ambience(), new BetterMinecraft(), new AspectRatio(), new ClickGui(), new CustomHotbar(), new FogBlur(), new GlassVapor(), new HitBubbles(), new HpCounter(), new HitColor(), new Hitboxes(), new SelfTag(), new InterfaceModule(), new NotificationsModule(), new WatermarkModule(), new HotKeysModule(), new TargetHudModule(), new PotionsModule(), new MediaPlayerModule(), new MusicBarModule(), new CooldownsModule(), new InfoModule(), new ArrayListModule(), new ArmorModule(), new InventoryModule(), new HPFocus(), new KeyStrokesModule(), new ViewModel(), new Freelook(), new HandSwap(), new VoiceControl(), new CameraSettings(), new ItemPhysics(), new CustomSwords(), new JumpCircle(), new ExplosionWave(), new Crosshair(), new KillEffect(), new ModelCollapse(), new NameTags(), new GlowEsp(), new SeeInvisible(), new ChinaHat(), new Emotions(), new BlockOverlay(), new FakePlayer(), new ShaderHands(), new ItemHighlight(), new LootView(), new NoRender(), new WorldParticles(), new LyricsTextModule(), new HitParticles(), new SelfPredictions(), new ProjectileHelper(), new SwingAnimation(), new TargetESP(), new WastedDeath(), new BrewViewer(), new Trails(), new ShulkerPreview(), new AutoDuel(), new AutoResell(), new AutoTpAccept(), new ClientSounds(), new DeathCoords(), new ClickPearl(), new HolyWorldHelper(), new TalTracker(), new ItemScroller(), new StreamerMode(), new ElytraSwap(), new FastExp(), new AutoSwap(), new AutoCommands(), new TapeMouse(), new CrystalOptimizer(), new Optimization(), new Globals()};
         this.register(moduleArray);
         EventBus.Companion.get().subscribe(this);
         CosmeticSiteState.Companion.get().start();
         new CustomPet().enable();
-        new Customization().enable();
     }
 
     public final int revision() {

@@ -175,6 +175,8 @@ implements GuiCapture.Source {
     @NotNull
     private final ThemesRenderer themesRenderer;
     @NotNull
+    private final rtx.kimiko.api.ui.cosmetics.CosmeticsRenderer cosmeticsRenderer;
+    @NotNull
     private final EventsRenderer eventsRenderer;
     @NotNull
     private final ConfigsRenderer configsRenderer;
@@ -285,6 +287,7 @@ implements GuiCapture.Source {
         this.bindPopup = new BindPopup();
         this.settingsPopup = new SettingsPopup();
         this.themesRenderer = new ThemesRenderer();
+        this.cosmeticsRenderer = new rtx.kimiko.api.ui.cosmetics.CosmeticsRenderer();
         this.eventsRenderer = new EventsRenderer();
         this.configsRenderer = new ConfigsRenderer();
         this.screenAnim = new GuiMotionAnimation();
@@ -497,6 +500,9 @@ implements GuiCapture.Source {
         if (next == Category.CONFIGS) {
             this.configsRenderer.open();
         }
+        if (next == Category.COSMETICS) {
+            this.cosmeticsRenderer.open();
+        }
         if (next == Category.EVENTS) {
             this.eventsRenderer.open();
             if (this.eventsSub == 1) {
@@ -646,6 +652,7 @@ implements GuiCapture.Source {
         this.themesRenderer.resetCardBlur();
         this.configsRenderer.resetCardBlur();
         this.eventsRenderer.resetCardBlur();
+        this.cosmeticsRenderer.resetCardBlur();
         graphics.getMatrices().pushMatrix();
         if (!(this.parallaxX == 0.0f) || !(this.parallaxY == 0.0f)) {
             graphics.getMatrices().translate(this.parallaxX, this.parallaxY);
@@ -667,6 +674,7 @@ implements GuiCapture.Source {
         this.themesRenderer.setAppearComposite(contentComposite);
         this.configsRenderer.setAppearComposite(contentComposite);
         this.eventsRenderer.setAppearComposite(contentComposite);
+        this.cosmeticsRenderer.setAppearComposite(contentComposite);
         Category currentCat = this.contentCategory;
         if (catAlpha > 0.01f && currentCat != null) {
             if (currentCat == Category.EVENTS) {
@@ -675,6 +683,8 @@ implements GuiCapture.Source {
                 this.themesRenderer.render(graphics, x, y, w, catAlpha, catSlide, frameDt);
             } else if (currentCat == Category.CONFIGS) {
                 this.configsRenderer.render(graphics, x, y, w, catAlpha, frameDt);
+            } else if (currentCat == Category.COSMETICS) {
+                this.cosmeticsRenderer.render(graphics, x, y, w, catAlpha, catSlide, frameDt);
             } else {
                 List<Module> mods = this.filteredModules(currentCat);
                 this.moduleList.render(graphics, x, y, w, catAlpha, catSlide, frameDt, currentCat, mods);
@@ -683,7 +693,7 @@ implements GuiCapture.Source {
                 }
             }
         }
-        boolean moduleHeaderView = currentCat != null && currentCat != Category.THEMES && currentCat != Category.EVENTS && currentCat != Category.CONFIGS;
+        boolean moduleHeaderView = currentCat != null && currentCat != Category.THEMES && currentCat != Category.EVENTS && currentCat != Category.CONFIGS && currentCat != Category.COSMETICS;
         boolean headerCategory = moduleHeaderView || currentCat == Category.CONFIGS;
         float f = configsTarget = currentCat == Category.CONFIGS ? 1.0f : 0.0f;
         if (headerCategory) {
@@ -807,7 +817,7 @@ implements GuiCapture.Source {
     }
 
     private final boolean isModuleView() {
-        return this.contentCategory != null && this.contentCategory != Category.THEMES && this.contentCategory != Category.EVENTS && this.contentCategory != Category.CONFIGS;
+        return this.contentCategory != null && this.contentCategory != Category.THEMES && this.contentCategory != Category.EVENTS && this.contentCategory != Category.CONFIGS && this.contentCategory != Category.COSMETICS;
     }
 
     private final List<Module> filteredModules(Category cat) {
@@ -1111,6 +1121,9 @@ implements GuiCapture.Source {
         if (this.contentCategory == Category.THEMES && event.button() == 0 && this.themesRenderer.click(x, y, w, mx, my)) {
             return true;
         }
+        if (this.contentCategory == Category.COSMETICS && event.button() == 0 && this.cosmeticsRenderer.click(x, y, w, mx, my)) {
+            return true;
+        }
         if (this.contentCategory == Category.CONFIGS) {
             if (event.button() == 0 && this.configsRenderer.scrollbarGrab(mx, my)) {
                 return true;
@@ -1334,6 +1347,8 @@ implements GuiCapture.Source {
                 this.themesRenderer.scroll(vertical, listH);
             } else if (this.contentCategory == Category.CONFIGS) {
                 this.configsRenderer.scroll(vertical, listH);
+            } else if (this.contentCategory == Category.COSMETICS) {
+                this.cosmeticsRenderer.scroll(vertical, listH);
             } else {
                 this.settingsPopup.close();
                 this.moduleList.scroll(vertical, listH - ModuleListRenderer.HEADER_OFFSET);
@@ -1854,7 +1869,7 @@ implements GuiCapture.Source {
         EVENT_SUB_ICONS = new String[]{"b", "m"};
         INSTANCE = new UI();
         MAIN_CATEGORIES = new Category[]{Category.VISUALS, Category.DISPLAY, Category.UTILS};
-        OTHER_CATEGORIES = new Category[]{Category.CONFIGS, Category.THEMES};
+        OTHER_CATEGORIES = new Category[]{Category.CONFIGS, Category.THEMES, Category.COSMETICS};
         motionBlurMask = new float[12];
         cardBlurMask = new float[396];
         popupBlurMask = new float[24];
@@ -2405,6 +2420,7 @@ implements GuiCapture.Source {
                 case 4 -> 'i';
                 case 5 -> 'w';
                 case 6 -> 'B';
+                case 7 -> 'c';
                 default -> throw new NoWhenBranchMatchedException();
             };
         }
@@ -2474,6 +2490,12 @@ implements GuiCapture.Source {
                 }
                 try {
                     nArray[Category.THEMES.ordinal()] = 6;
+                }
+                catch (NoSuchFieldError noSuchFieldError) {
+                    // empty catch block
+                }
+                try {
+                    nArray[Category.COSMETICS.ordinal()] = 7;
                 }
                 catch (NoSuchFieldError noSuchFieldError) {
                     // empty catch block

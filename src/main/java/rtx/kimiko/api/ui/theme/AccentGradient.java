@@ -144,6 +144,7 @@ public final class AccentGradient {
             case 4 -> 4;
             case 5 -> 3;
             case 6 -> 5;
+            case 7 -> 5;
             default -> throw new NoWhenBranchMatchedException();
         };
         return (float)idx / 5.0f;

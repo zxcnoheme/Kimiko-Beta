@@ -1388,6 +1388,7 @@ public final class ModuleListRenderer {
                 case 4 -> 'i';
                 case 5 -> 'w';
                 case 6 -> 'B';
+                case 7 -> 'c';
                 default -> throw new NoWhenBranchMatchedException();
             };
         }
@@ -1507,6 +1508,12 @@ public final class ModuleListRenderer {
                 }
                 try {
                     nArray[Category.THEMES.ordinal()] = 6;
+                }
+                catch (NoSuchFieldError noSuchFieldError) {
+                    // empty catch block
+                }
+                try {
+                    nArray[Category.COSMETICS.ordinal()] = 7;
                 }
                 catch (NoSuchFieldError noSuchFieldError) {
                     // empty catch block

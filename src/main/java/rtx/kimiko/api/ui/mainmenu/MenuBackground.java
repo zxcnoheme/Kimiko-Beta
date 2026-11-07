@@ -1,27 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.systems.RenderSystem
- *  com.mojang.blaze3d.textures.GpuTexture
- *  com.mojang.blaze3d.textures.GpuTextureView
- *  com.mojang.blaze3d.textures.TextureFormat
- *  kotlin.Metadata
- *  kotlin.enums.EnumEntries
- *  kotlin.enums.EnumEntriesKt
- *  kotlin.io.CloseableKt
- *  kotlin.jvm.internal.DefaultConstructorMarker
- *  kotlin.jvm.internal.Intrinsics
- *  kotlin.jvm.internal.SourceDebugExtension
- *  kotlin.math.MathKt
- *  net.minecraft.client.texture.NativeImage
- *  net.minecraft.client.texture.AbstractTexture
- *  net.minecraft.util.Identifier
- *  net.minecraft.client.MinecraftClient
- *  net.minecraft.resource.Resource
- *  org.jetbrains.annotations.NotNull
- *  org.jetbrains.annotations.Nullable
- */
 package rtx.kimiko.api.ui.mainmenu;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -31,7 +7,6 @@ import com.mojang.blaze3d.textures.TextureFormat;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -39,31 +14,28 @@ import java.nio.file.LinkOption;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.imageio.ImageIO;
-import kotlin.Metadata;
-import kotlin.enums.EnumEntries;
-import kotlin.enums.EnumEntriesKt;
-import kotlin.io.CloseableKt;
-import kotlin.jvm.internal.DefaultConstructorMarker;
-import kotlin.jvm.internal.Intrinsics;
-import kotlin.jvm.internal.SourceDebugExtension;
-import kotlin.math.MathKt;
-import net.minecraft.client.texture.NativeImage;
-import net.minecraft.client.texture.AbstractTexture;
-import net.minecraft.util.Identifier;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.texture.AbstractTexture;
+import net.minecraft.client.texture.NativeImage;
 import net.minecraft.resource.Resource;
+import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rtx.kimiko.Kimiko;
-import rtx.kimiko.api.ui.mainmenu.MenuTextures;
 
-@Metadata(mv={2, 4, 0}, k=1, xi=48, d1={"\u0000@\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0010\u000b\n\u0002\b\u0006\n\u0002\u0010\u0007\n\u0002\b\u0007\n\u0002\u0010\u0002\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\t\n\u0002\u0018\u0002\n\u0002\b\f\u0018\u0000 .2\u00020\u0001:\u0003/0.B/\u0012\u0006\u0010\u0003\u001a\u00020\u0002\u0012\u0006\u0010\u0004\u001a\u00020\u0002\u0012\u0006\u0010\u0006\u001a\u00020\u0005\u0012\u0006\u0010\u0007\u001a\u00020\u0002\u0012\u0006\u0010\t\u001a\u00020\b\u00a2\u0006\u0004\b\n\u0010\u000bJ\r\u0010\u0003\u001a\u00020\u0002\u00a2\u0006\u0004\b\u0003\u0010\fJ\r\u0010\u0004\u001a\u00020\u0002\u00a2\u0006\u0004\b\u0004\u0010\fJ\r\u0010\u0006\u001a\u00020\u0005\u00a2\u0006\u0004\b\u0006\u0010\rJ\r\u0010\u0007\u001a\u00020\u0002\u00a2\u0006\u0004\b\u0007\u0010\fJ\r\u0010\t\u001a\u00020\b\u00a2\u0006\u0004\b\t\u0010\u000eJ\r\u0010\u0010\u001a\u00020\u000f\u00a2\u0006\u0004\b\u0010\u0010\u0011J\r\u0010\u0012\u001a\u00020\b\u00a2\u0006\u0004\b\u0012\u0010\u000eJ\r\u0010\u0013\u001a\u00020\b\u00a2\u0006\u0004\b\u0013\u0010\u000eJ\r\u0010\u0014\u001a\u00020\b\u00a2\u0006\u0004\b\u0014\u0010\u000eJ\u000f\u0010\u0015\u001a\u0004\u0018\u00010\u0002\u00a2\u0006\u0004\b\u0015\u0010\fJ\u000f\u0010\u0016\u001a\u0004\u0018\u00010\u0002\u00a2\u0006\u0004\b\u0016\u0010\fJ\u000f\u0010\u0018\u001a\u00020\u0017H\u0002\u00a2\u0006\u0004\b\u0018\u0010\u0019J\u000f\u0010\u001a\u001a\u00020\u0017H\u0002\u00a2\u0006\u0004\b\u001a\u0010\u0019J\u0011\u0010\u001c\u001a\u0004\u0018\u00010\u001bH\u0002\u00a2\u0006\u0004\b\u001c\u0010\u001dJ!\u0010 \u001a\u00020\u00172\u0006\u0010\u001e\u001a\u00020\u001b2\b\u0010\u001f\u001a\u0004\u0018\u00010\u001bH\u0002\u00a2\u0006\u0004\b \u0010!R\u0014\u0010\u0003\u001a\u00020\u00028\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0003\u0010\"R\u0014\u0010\u0004\u001a\u00020\u00028\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0004\u0010\"R\u0014\u0010\u0006\u001a\u00020\u00058\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0006\u0010#R\u0014\u0010\u0007\u001a\u00020\u00028\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0007\u0010\"R\u0014\u0010\t\u001a\u00020\b8\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\t\u0010$R\u0016\u0010&\u001a\u00020%8\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b&\u0010'R\u0018\u0010(\u001a\u0004\u0018\u00010\u001b8\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b(\u0010)R\u0018\u0010*\u001a\u0004\u0018\u00010\u001b8\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b*\u0010)R\u0018\u0010+\u001a\u0004\u0018\u00010\u00028\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b+\u0010\"R\u0018\u0010,\u001a\u0004\u0018\u00010\u00028\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b,\u0010\"R\u0016\u0010\u0010\u001a\u00020\u000f8\u0002@\u0002X\u0082\u000e\u00a2\u0006\u0006\n\u0004\b\u0010\u0010-\u00a8\u00061"}, d2={"Lrtx/kimiko/api/ui/mainmenu/MenuBackground;", "", "", "id", "name", "Lrtx/kimiko/api/ui/mainmenu/MenuBackground$Kind;", "kind", "source", "", "builtIn", "<init>", "(Ljava/lang/String;Ljava/lang/String;Lrtx/kimiko/api/ui/mainmenu/MenuBackground$Kind;Ljava/lang/String;Z)V", "()Ljava/lang/String;", "()Lrtx/kimiko/api/ui/mainmenu/MenuBackground$Kind;", "()Z", "", "aspect", "()F", "failed", "ready", "procedural", "texture", "blurred", "", "pump", "()V", "decode", "Ljava/awt/image/BufferedImage;", "readSource", "()Ljava/awt/image/BufferedImage;", "sharp", "blur", "uploadAll", "(Ljava/awt/image/BufferedImage;Ljava/awt/image/BufferedImage;)V", "Ljava/lang/String;", "Lrtx/kimiko/api/ui/mainmenu/MenuBackground$Kind;", "Z", "Lrtx/kimiko/api/ui/mainmenu/MenuBackground$State;", "state", "Lrtx/kimiko/api/ui/mainmenu/MenuBackground$State;", "pending", "Ljava/awt/image/BufferedImage;", "pendingBlur", "sharpTexture", "blurTexture", "F", "Companion", "Kind", "State", "rtx.kimiko:kimiko"})
-@SourceDebugExtension(value={"SMAP\nMenuBackground.kt\nKotlin\n*S Kotlin\n*F\n+ 1 MenuBackground.kt\nrtx/kimiko/api/ui/mainmenu/MenuBackground\n+ 2 fake.kt\nkotlin/jvm/internal/FakeKt\n*L\n1#1,234:1\n1#2:235\n*E\n"})
+/**
+ * Один фон главного меню. Декодирование и ресайз целиком идут на фоновом воркере,
+ * на рендер-потоке выполняется только быстрая заливка текстуры в GPU.
+ */
 public final class MenuBackground {
     @NotNull
-    public static final Companion Companion = new Companion(null);
+    public static final Companion Companion = new Companion();
     @NotNull
     private final String id;
     @NotNull
@@ -73,33 +45,45 @@ public final class MenuBackground {
     @NotNull
     private final String source;
     private final boolean builtIn;
-    @NotNull
-    private volatile State state;
+
+    private final Object lock = new Object();
+    private State stage;
+    private volatile float aspect;
     @Nullable
-    private volatile BufferedImage pending;
+    private BufferedImage pendingPreview;
     @Nullable
-    private volatile BufferedImage pendingBlur;
+    private BufferedImage pendingFull;
     @Nullable
-    private String sharpTexture;
+    private BufferedImage pendingBlur;
     @Nullable
-    private String blurTexture;
-    private float aspect;
+    private volatile BufferedImage blurSource;
+    @Nullable
+    private volatile String previewTexture;
+    @Nullable
+    private volatile String fullTexture;
+    @Nullable
+    private volatile String blurTexture;
+    private boolean uploadedPreview;
+    private boolean uploadedFull;
+    private boolean uploadedBlur;
+    private volatile boolean wantFull;
+    private volatile boolean wantBlur;
+    private boolean fullInFlight;
+
     @NotNull
     private static final AtomicInteger UPLOAD_ID = new AtomicInteger();
     private static final int BLUR_MAX = 220;
     private static final int BLUR_PASSES = 4;
+    private static final int PREVIEW_MAX = 640;
+    private static final ThreadPoolExecutor DECODERS;
 
     public MenuBackground(@NotNull String id, @NotNull String name, @NotNull Kind kind, @NotNull String source, boolean builtIn) {
-        Intrinsics.checkNotNullParameter((Object)id, (String)"id");
-        Intrinsics.checkNotNullParameter((Object)name, (String)"name");
-        Intrinsics.checkNotNullParameter((Object)((Object)kind), (String)"kind");
-        Intrinsics.checkNotNullParameter((Object)source, (String)"source");
         this.id = id;
         this.name = name;
         this.kind = kind;
         this.source = source;
         this.builtIn = builtIn;
-        this.state = State.IDLE;
+        this.stage = State.IDLE;
         this.aspect = 1.7777778f;
     }
 
@@ -132,77 +116,236 @@ public final class MenuBackground {
     }
 
     public final boolean failed() {
-        return this.state == State.FAILED;
+        return this.stage == State.FAILED;
     }
 
     public final boolean ready() {
-        return this.state == State.READY;
+        return this.stage == State.READY;
+    }
+
+    public final boolean loading() {
+        return this.stage == State.QUEUED || this.stage == State.DECODING
+                || this.stage == State.DECODED || this.stage == State.APPLYING;
     }
 
     public final boolean procedural() {
         return this.kind == Kind.AURORA || this.kind == Kind.GRADIENT;
     }
 
+    /** Мелкая (до 640px) копия — для превью в галерее. */
     @Nullable
-    public final String texture() {
-        if (this.procedural()) {
+    public final String preview() {
+        if (this.procedural() || this.failed()) {
             return null;
         }
         this.pump();
-        return this.state == State.READY ? this.sharpTexture : null;
+        return this.previewTexture;
+    }
+
+    /** Полный размер — для полноэкранного фона главного меню. */
+    @Nullable
+    public final String texture() {
+        if (this.procedural() || this.failed()) {
+            return null;
+        }
+        this.wantFull = true;
+        this.pump();
+        if (this.fullTexture != null) {
+            return this.fullTexture;
+        }
+        this.requestFullUpload();
+        return null;
     }
 
     @Nullable
     public final String blurred() {
-        if (this.procedural()) {
+        if (this.procedural() || this.failed()) {
             return null;
         }
+        this.wantBlur = true;
         this.pump();
-        return this.state == State.READY ? this.blurTexture : null;
+        if (this.blurTexture != null) {
+            return this.blurTexture;
+        }
+        if (this.stage == State.READY && this.blurSource != null) {
+            MinecraftClient.getInstance().execute(() -> MenuBackground.this.uploadBlurNow());
+        }
+        return null;
     }
 
     private final void pump() {
-        if (this.state == State.IDLE) {
-            this.state = State.LOADING;
-            Thread thread = new Thread(() -> MenuBackground.pump$lambda$0(this), "kimiko-menu-bg");
-            thread.setDaemon(true);
-            thread.start();
-            return;
-        }
-        if (this.state == State.DECODED) {
-            BufferedImage sharp = this.pending;
-            BufferedImage blur = this.pendingBlur;
-            this.pending = null;
-            this.pendingBlur = null;
-            if (sharp == null) {
-                this.state = State.FAILED;
+        synchronized (this.lock) {
+            if (this.stage == State.IDLE) {
+                this.stage = State.QUEUED;
+                MenuBackground.DECODERS.execute(() -> MenuBackground.this.decodeTask());
                 return;
             }
-            this.state = State.LOADING;
-            MinecraftClient.getInstance().execute(() -> MenuBackground.pump$lambda$1(this, sharp, blur));
+            if (this.stage == State.DECODED) {
+                this.stage = State.APPLYING;
+                MinecraftClient.getInstance().execute(() -> MenuBackground.this.apply());
+            }
         }
     }
 
-    private final void decode() {
+    private final void decodeTask() {
+        synchronized (this.lock) {
+            if (this.stage != State.QUEUED) {
+                return;
+            }
+            this.stage = State.DECODING;
+        }
         try {
             BufferedImage image = this.readSource();
             if (image == null) {
-                this.state = State.FAILED;
+                synchronized (this.lock) {
+                    this.stage = State.FAILED;
+                }
                 return;
             }
-            this.aspect = Math.max(0.2f, (float)image.getWidth() / (float)Math.max(1, image.getHeight()));
-            this.pendingBlur = MenuBackground.Companion.blurCopy(image);
-            this.pending = image;
-            this.state = State.DECODED;
+            this.aspect = Math.max(0.2f, (float) image.getWidth() / (float) Math.max(1, image.getHeight()));
+            BufferedImage preview = Companion.scaleTo(image, PREVIEW_MAX);
+            BufferedImage blurImage = Companion.blurCopy(image);
+            synchronized (this.lock) {
+                this.blurSource = blurImage;
+                this.pendingBlur = blurImage;
+                this.pendingPreview = preview;
+                if (this.wantFull) {
+                    this.pendingFull = image;
+                }
+                this.stage = State.DECODED;
+            }
+            MinecraftClient.getInstance().execute(() -> MenuBackground.this.pump());
         }
         catch (Throwable ignored) {
-            this.state = State.FAILED;
+            synchronized (this.lock) {
+                this.stage = State.FAILED;
+            }
         }
     }
 
-    /*
-     * WARNING - Removed try catching itself - possible behaviour change.
-     */
+    private final void apply() {
+        BufferedImage preview;
+        BufferedImage full;
+        BufferedImage blur;
+        synchronized (this.lock) {
+            if (this.stage != State.APPLYING) {
+                return;
+            }
+            preview = this.pendingPreview;
+            full = this.pendingFull;
+            blur = this.pendingBlur;
+            this.pendingPreview = null;
+            this.pendingFull = null;
+            this.pendingBlur = null;
+            if (preview == null && !this.uploadedPreview) {
+                this.stage = State.FAILED;
+                return;
+            }
+        }
+        try {
+            if (preview != null && !this.uploadedPreview) {
+                this.previewTexture = Companion.upload(preview, "prev");
+                this.uploadedPreview = true;
+            }
+            if (full != null && this.wantFull && !this.uploadedFull) {
+                this.fullTexture = Companion.upload(full, "sharp");
+                this.uploadedFull = true;
+            }
+            if (blur != null && this.wantBlur && !this.uploadedBlur) {
+                this.blurTexture = Companion.upload(blur, "blur");
+                this.uploadedBlur = true;
+            }
+            synchronized (this.lock) {
+                this.stage = State.READY;
+            }
+        }
+        catch (Throwable ignored) {
+            synchronized (this.lock) {
+                this.stage = State.FAILED;
+            }
+        }
+    }
+
+    /** Полный размер понадобился уже после готовности — дозагружаем в фоне. */
+    private final void requestFullUpload() {
+        synchronized (this.lock) {
+            if (this.stage != State.READY || this.uploadedFull || this.fullInFlight) {
+                return;
+            }
+            this.fullInFlight = true;
+        }
+        MenuBackground.DECODERS.execute(() -> MenuBackground.this.decodeFullTask());
+    }
+
+    private final void decodeFullTask() {
+        try {
+            BufferedImage image = this.readSource();
+            if (image == null) {
+                this.fullInFlight = false;
+                return;
+            }
+            synchronized (this.lock) {
+                this.pendingFull = image;
+                this.stage = State.DECODED;
+            }
+            MinecraftClient.getInstance().execute(() -> MenuBackground.this.applyPendingPieces());
+        }
+        catch (Throwable ignored) {
+            this.fullInFlight = false;
+        }
+    }
+
+    /** Догружает всё, что «попросили», после того как декод уже был готов. */
+    private final void applyPendingPieces() {
+        BufferedImage full;
+        synchronized (this.lock) {
+            if (this.stage != State.DECODED) {
+                return;
+            }
+            full = this.pendingFull;
+            this.pendingFull = null;
+            if (full == null) {
+                this.fullInFlight = false;
+                return;
+            }
+            this.stage = State.APPLYING;
+        }
+        try {
+            if (!this.uploadedFull) {
+                this.fullTexture = Companion.upload(full, "sharp");
+                this.uploadedFull = true;
+            }
+            synchronized (this.lock) {
+                this.stage = State.READY;
+            }
+        }
+        catch (Throwable ignored) {
+            synchronized (this.lock) {
+                this.stage = State.FAILED;
+            }
+        }
+        finally {
+            this.fullInFlight = false;
+        }
+    }
+
+    /** Размытая копия (мелкая) — выгружается мгновенно, безопасно вызывать из кадра. */
+    private final void uploadBlurNow() {
+        if (this.stage != State.READY || this.uploadedBlur) {
+            return;
+        }
+        BufferedImage blur = this.blurSource;
+        if (blur == null) {
+            return;
+        }
+        try {
+            this.blurTexture = Companion.upload(blur, "blur");
+            this.uploadedBlur = true;
+        }
+        catch (Throwable ignored) {
+        }
+    }
+
     private final BufferedImage readSource() {
         if (this.kind == Kind.USER) {
             Path path = Path.of(this.source, new String[0]);
@@ -211,7 +354,8 @@ public final class MenuBackground {
             }
             try (InputStream it = Files.newInputStream(path, new OpenOption[0])) {
                 return ImageIO.read(it);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 return null;
             }
         }
@@ -223,53 +367,44 @@ public final class MenuBackground {
         if (resource.isEmpty()) {
             return null;
         }
-        try (InputStream it = resource.get().getInputStream()) {
+        try (InputStream it = ((Resource) resource.get()).getInputStream()) {
             return ImageIO.read(it);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             return null;
         }
     }
 
-    private final void uploadAll(BufferedImage sharp, BufferedImage blur) {
-        try {
-            this.sharpTexture = MenuBackground.Companion.upload(sharp, "sharp");
-            BufferedImage bufferedImage = blur;
-            this.blurTexture = bufferedImage == null ? this.sharpTexture : MenuBackground.Companion.upload(bufferedImage, "blur");
-            this.state = State.READY;
-        }
-        catch (Throwable ignored) {
-            this.state = State.FAILED;
-        }
-    }
-
-    private static final void pump$lambda$0(MenuBackground this$0) {
-        this$0.decode();
-    }
-
-    private static final void pump$lambda$1(MenuBackground this$0, BufferedImage $sharp, BufferedImage $blur) {
-        this$0.uploadAll($sharp, $blur);
-    }
-
-    @Metadata(mv={2, 4, 0}, k=1, xi=48, d1={"\u0000<\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0002\b\u0003\n\u0002\u0010\u0015\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\u0003\n\u0002\u0010\u0002\n\u0002\b\u0003\n\u0002\u0010\u000e\n\u0002\b\u0003\n\u0002\u0018\u0002\n\u0002\b\u0006\b\u0086\u0003\u0018\u00002\u00020\u0001B\t\b\u0002\u00a2\u0006\u0004\b\u0002\u0010\u0003J\u0017\u0010\u0006\u001a\u00020\u00042\u0006\u0010\u0005\u001a\u00020\u0004H\u0002\u00a2\u0006\u0004\b\u0006\u0010\u0007J7\u0010\u0010\u001a\u00020\u000f2\u0006\u0010\t\u001a\u00020\b2\u0006\u0010\n\u001a\u00020\b2\u0006\u0010\f\u001a\u00020\u000b2\u0006\u0010\r\u001a\u00020\u000b2\u0006\u0010\u000e\u001a\u00020\u000bH\u0002\u00a2\u0006\u0004\b\u0010\u0010\u0011J\u001f\u0010\u0015\u001a\u00020\u00132\u0006\u0010\u0012\u001a\u00020\u00042\u0006\u0010\u0014\u001a\u00020\u0013H\u0002\u00a2\u0006\u0004\b\u0015\u0010\u0016R\u0014\u0010\u0018\u001a\u00020\u00178\u0002X\u0082\u0004\u00a2\u0006\u0006\n\u0004\b\u0018\u0010\u0019R\u0014\u0010\u001a\u001a\u00020\u000b8\u0002X\u0082T\u00a2\u0006\u0006\n\u0004\b\u001a\u0010\u001bR\u0014\u0010\u001c\u001a\u00020\u000b8\u0002X\u0082T\u00a2\u0006\u0006\n\u0004\b\u001c\u0010\u001b\u00a8\u0006\u001d"}, d2={"Lrtx/kimiko/api/ui/mainmenu/MenuBackground.Companion;", "", "<init>", "()V", "Ljava/awt/image/BufferedImage;", "source", "blurCopy", "(Ljava/awt/image/BufferedImage;)Ljava/awt/image/BufferedImage;", "", "src", "dst", "", "w", "h", "radius", "", "boxBlur", "([I[IIII)V", "image", "", "tag", "upload", "(Ljava/awt/image/BufferedImage;Ljava/lang/String;)Ljava/lang/String;", "Ljava/util/concurrent/atomic/AtomicInteger;", "UPLOAD_ID", "Ljava/util/concurrent/atomic/AtomicInteger;", "BLUR_MAX", "I", "BLUR_PASSES", "rtx.kimiko:kimiko"})
     public static final class Companion {
         private Companion() {
         }
 
-        private final BufferedImage blurCopy(BufferedImage source) {
+        /** Вписывает картинку так, чтобы длинная сторона не превосходила max. */
+        private final BufferedImage scaleTo(BufferedImage source, int max) {
             int w = source.getWidth();
             int h = source.getHeight();
-            float scale = Math.min(1.0f, (float)220 / (float)Math.max(w, h));
-            int tw = Math.max(8, MathKt.roundToInt((float)((float)w * scale)));
-            int th = Math.max(8, MathKt.roundToInt((float)((float)h * scale)));
-            BufferedImage small = new BufferedImage(tw, th, 2);
-            Graphics2D g = small.createGraphics();
+            float scale = Math.min(1.0f, (float) max / (float) Math.max(w, h));
+            int tw = Math.max(8, (int) Math.rint((float) w * scale));
+            int th = Math.max(8, (int) Math.rint((float) h * scale));
+            if (tw == w && th == h) {
+                return source;
+            }
+            BufferedImage out = new BufferedImage(tw, th, 2);
+            Graphics2D g = out.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+            g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
             g.drawImage(source, 0, 0, tw, th, null);
             g.dispose();
+            return out;
+        }
+
+        private final BufferedImage blurCopy(BufferedImage source) {
+            BufferedImage small = this.scaleTo(source, BLUR_MAX);
+            int tw = small.getWidth();
+            int th = small.getHeight();
             int[] pixels = small.getRGB(0, 0, tw, th, null, 0, tw);
             int[] temp = new int[pixels.length];
-            for (int pass = 0; pass < 4; ++pass) {
-                Intrinsics.checkNotNull((Object)pixels);
+            for (int pass = 0; pass < BLUR_PASSES; ++pass) {
                 this.boxBlur(pixels, temp, tw, th, 2);
                 this.boxBlur(temp, pixels, th, tw, 2);
             }
@@ -306,65 +441,61 @@ public final class MenuBackground {
             int w = image.getWidth();
             int h = image.getHeight();
             NativeImage nativeImage = new NativeImage(w, h, false);
-            for (int y = 0; y < h; ++y) {
-                for (int x = 0; x < w; ++x) {
-                    nativeImage.setColorArgb(x, y, image.getRGB(x, y));
+            try {
+                for (int y = 0; y < h; ++y) {
+                    for (int x = 0; x < w; ++x) {
+                        nativeImage.setColorArgb(x, y, image.getRGB(x, y));
+                    }
                 }
+                int uid = UPLOAD_ID.getAndIncrement();
+                GpuTexture gpuTexture = RenderSystem.getDevice().createTexture(() -> Companion.upload$lambda$0(uid), 5, TextureFormat.RGBA8, w, h, 1, 1);
+                RenderSystem.getDevice().createCommandEncoder().writeToTexture(gpuTexture, nativeImage);
+                GpuTextureView view = RenderSystem.getDevice().createTextureView(gpuTexture);
+                Identifier id = Identifier.of(Kimiko.Companion.namespace(), "menu/bg_" + tag + "_" + uid);
+                MinecraftClient.getInstance().getTextureManager().registerTexture(id, (AbstractTexture) new MenuTextures.SimpleTexture(gpuTexture, view));
+                return id.toString();
             }
-            int uid = UPLOAD_ID.getAndIncrement();
-            GpuTexture gpuTexture = RenderSystem.getDevice().createTexture(() -> Companion.upload$lambda$0(uid), 5, TextureFormat.RGBA8, w, h, 1, 1);
-            Intrinsics.checkNotNullExpressionValue((Object)gpuTexture, (String)"createTexture(...)");
-            GpuTexture texture = gpuTexture;
-            RenderSystem.getDevice().createCommandEncoder().writeToTexture(texture, nativeImage);
-            GpuTextureView gpuTextureView = RenderSystem.getDevice().createTextureView(texture);
-            Intrinsics.checkNotNullExpressionValue((Object)gpuTextureView, (String)"createTextureView(...)");
-            GpuTextureView view = gpuTextureView;
-            nativeImage.close();
-            Identifier identifier2 = Identifier.of((String)Kimiko.Companion.namespace(), (String)("menu/bg_" + tag + "_" + uid));
-            Intrinsics.checkNotNullExpressionValue((Object)identifier2, (String)"fromNamespaceAndPath(...)");
-            Identifier id = identifier2;
-            MinecraftClient.getInstance().getTextureManager().registerTexture(id, (AbstractTexture)new MenuTextures.SimpleTexture(texture, view));
-            String string = id.toString();
-            Intrinsics.checkNotNullExpressionValue((Object)string, (String)"toString(...)");
-            return string;
+            finally {
+                nativeImage.close();
+            }
         }
 
         private static final String upload$lambda$0(int $uid) {
             return "kimiko_menu_bg_" + $uid;
         }
-
-        public /* synthetic */ Companion(DefaultConstructorMarker $constructor_marker) {
-            this();
-        }
     }
 
-    @Metadata(mv={2, 4, 0}, k=1, xi=48, d1={"\u0000\f\n\u0002\u0018\u0002\n\u0002\u0010\u0010\n\u0002\b\u0007\b\u0086\u0081\u0002\u0018\u00002\b\u0012\u0004\u0012\u00020\u00000\u0001B\t\b\u0002\u00a2\u0006\u0004\b\u0002\u0010\u0003j\u0002\b\u0004j\u0002\b\u0005j\u0002\b\u0006j\u0002\b\u0007\u00a8\u0006\b"}, d2={"Lrtx/kimiko/api/ui/mainmenu/MenuBackground$Kind;", "", "<init>", "(Ljava/lang/String;I)V", "IMAGE", "USER", "AURORA", "GRADIENT", "rtx.kimiko:kimiko"})
     public static enum Kind {
         IMAGE,
         USER,
         AURORA,
-        GRADIENT;
-@NotNull
-        public static EnumEntries<Kind> getEntries() {
-            return EnumEntriesKt.enumEntries(values());
-        }
-
-            
+        GRADIENT
     }
 
-    @Metadata(mv={2, 4, 0}, k=1, xi=48, d1={"\u0000\f\n\u0002\u0018\u0002\n\u0002\u0010\u0010\n\u0002\b\b\b\u0082\u0081\u0002\u0018\u00002\b\u0012\u0004\u0012\u00020\u00000\u0001B\t\b\u0002\u00a2\u0006\u0004\b\u0002\u0010\u0003j\u0002\b\u0004j\u0002\b\u0005j\u0002\b\u0006j\u0002\b\u0007j\u0002\b\b\u00a8\u0006\t"}, d2={"Lrtx/kimiko/api/ui/mainmenu/MenuBackground$State;", "", "<init>", "(Ljava/lang/String;I)V", "IDLE", "LOADING", "DECODED", "READY", "FAILED", "rtx.kimiko:kimiko"})
     private static enum State {
         IDLE,
-        LOADING,
+        QUEUED,
+        DECODING,
         DECODED,
+        APPLYING,
         READY,
-        FAILED;
-@NotNull
-        public static EnumEntries<State> getEntries() {
-            return EnumEntriesKt.enumEntries(values());
-        }
+        FAILED
+    }
 
-            
+    private static final class DecodeFactory implements ThreadFactory {
+        @Override
+        @NotNull
+        public Thread newThread(@NotNull Runnable r) {
+            Thread thread = new Thread(r, "kimiko-menu-bg-decode");
+            thread.setDaemon(true);
+            return thread;
+        }
+    }
+
+    static {
+        DecodeFactory factory = new DecodeFactory();
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 60L, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), factory);
+        executor.allowCoreThreadTimeOut(true);
+        DECODERS = executor;
     }
 }
-

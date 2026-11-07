@@ -27,7 +27,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import rtx.kimiko.Kimiko;
-import rtx.kimiko.api.modules.impl.Visuals.Customization;
 import rtx.kimiko.utils.render.others.cape.CapeGradient;
 
 @Mixin(value={AbstractClientPlayerEntity.class})
@@ -52,8 +51,7 @@ public class CustomCapeMixin {
         if (client.player == null || !CustomCapeMixin.kimiko$shouldUseCustomCape(player, (AbstractClientPlayerEntity)client.player)) {
             return;
         }
-        Customization customization = Customization.getInstance();
-        if (customization != null && customization.wingsEnabledFor(player)) {
+        if (rtx.kimiko.api.modules.impl.Visuals.cosmetics.CosmeticSettings.wingsActiveFor(player)) {
             return;
         }
         CapeGradient.tick();

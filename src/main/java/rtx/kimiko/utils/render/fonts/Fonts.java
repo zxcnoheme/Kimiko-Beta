@@ -57,7 +57,8 @@ public enum Fonts {
         SMALL_PIXEL("small-pixel", "fonts/smallpixel/small-pixel", new String[0]),
         MANASCO("manasco", "fonts/manasco/manasco", new String[0]),
         MAINMENU("mainmenu", "fonts/mainmenu/mainmenu", new String[0]),
-        SEMI_BOLD("semi_bold", null, new String[0]);
+        SEMI_BOLD("semi_bold", null, new String[0]),
+        WHITE_ICONS("white-icons", "fonts/white-icons/white-icons", new String[]{"whiteicons"});
     @NotNull
     public static final Companion Companion;
     @NotNull
