@@ -170,7 +170,9 @@ public final class DragSystem {
                 element.readState(pos);
                 element.getDrag().syncToTarget();
             }
-            catch (Exception exception) {}
+            catch (Exception exception) {
+                System.out.println("[KIMIKO] Ошибка применения позиции HUD из конфига: " + exception);
+            }
         }
     }
 
@@ -333,6 +335,9 @@ public final class DragSystem {
         Render2D.flush();
     }
 
+    /** Элемент, ошибка рендера которого уже доложена (чтобы не спамить каждый кадр). */
+    private Draggable lastReportedFailure;
+
     private final void handleRenderFailure(Draggable element, Throwable throwable) {
         try {
             RectUtil.clearSplitOverride();
@@ -340,6 +345,11 @@ public final class DragSystem {
         }
         catch (Throwable throwable2) {
             // empty catch block
+        }
+        // сломанный HUD-компонент бросал каждый кадр молча — докладываем один раз на элемент
+        if (element != null && throwable != null && this.lastReportedFailure != element) {
+            this.lastReportedFailure = element;
+            System.out.println("[KIMIKO] Ошибка рендера HUD-компонента \"" + element.getClass().getSimpleName() + "\": " + throwable);
         }
     }
 

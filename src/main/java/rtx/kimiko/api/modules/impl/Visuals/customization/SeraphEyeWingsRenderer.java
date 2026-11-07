@@ -111,6 +111,7 @@ public final class SeraphEyeWingsRenderer {
     @NotNull
     private static final Map<AbstractClientPlayerEntity, PlaybackState> playbackStates;
     private static boolean loaded;
+    private static long lastLoadFailMs;
     @NotNull
     private static final float[] ZERO;
     @NotNull
@@ -405,7 +406,9 @@ public final class SeraphEyeWingsRenderer {
             if (loaded) {
                 return;
             }
-            loaded = true;
+            if (System.currentTimeMillis() - lastLoadFailMs < 10000L) {
+                return; // недавняя неудача — не ретраим каждый кадр
+            }
             try {
                 Throwable throwable;
                 Object object;
@@ -457,8 +460,11 @@ public final class SeraphEyeWingsRenderer {
                 }
             }
             catch (Exception ignored) {
+                // не запоминаем «загружено» — ретраим с задержкой, иначе крылья мертвы до рестарта
+                lastLoadFailMs = System.currentTimeMillis();
                 geometry.getRootBones().clear();
                 animations.clear();
+                System.out.println("[KIMIKO] Seraph: не удалось загрузить модель, повтор через 10с (" + ignored + ")");
             }
         }
     }

@@ -60,4 +60,21 @@ public enum CosmeticType {
         }
         return null;
     }
+
+    /**
+     * Резолв id внутри конкретной категории: у разных косметик могут совпадать id
+     * (например "goat" у плечевого козла и питомца), поэтому без категории
+     * возвращается первая попавшаяся.
+     */
+    public static CosmeticType byId(String id, Cat cat) {
+        if (id == null || id.isEmpty()) {
+            return null;
+        }
+        for (CosmeticType t : values()) {
+            if (t.id.equals(id) && t.cat == cat) {
+                return t;
+            }
+        }
+        return byId(id);
+    }
 }

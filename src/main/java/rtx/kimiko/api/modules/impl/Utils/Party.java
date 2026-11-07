@@ -375,6 +375,8 @@ extends Module {
             return false;
         });
         if (!this.bind.isBound()) {
+            this.lastDown = false;
+        } else {
             boolean down = this.bind.getValue().isDown(window.getHandle());
             if (down && !this.lastDown) {
                 this.onBindPressed();

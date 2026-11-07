@@ -14,6 +14,8 @@ public abstract class MainMenuMixin {
     private void kimiko$openWhiteMenu(CallbackInfo ci) {
         try {
             MinecraftClient.getInstance().setScreen(new WhiteMenu());
+            // не даём ванилле продолжать init уже снятого TitleScreen (риск реентерабельного краша)
+            ci.cancel();
         } catch (Throwable ignored) {
         }
     }

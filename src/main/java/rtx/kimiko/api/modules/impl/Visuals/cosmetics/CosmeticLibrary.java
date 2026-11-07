@@ -26,27 +26,48 @@ public final class CosmeticLibrary {
         if (existing != null) {
             return existing;
         }
-        try {
-            MinecraftClient mc = MinecraftClient.getInstance();
-            if (mc == null || mc.getTextureManager() == null) {
+        // синхронизация: без неё две плитки могут одновременно декодировать и перерегистрировать одну текстуру
+        synchronized (CosmeticLibrary.class) {
+            existing = TEXTURES.get(key);
+            if (existing != null) {
+                return existing;
+            }
+            NativeImage img = null;
+            NativeImageBackedTexture tex = null;
+            try {
+                MinecraftClient mc = MinecraftClient.getInstance();
+                if (mc == null || mc.getTextureManager() == null) {
+                    return null;
+                }
+                int comma = base64.indexOf(',');
+                if (comma >= 0 && comma < 32 && base64.regionMatches(0, "data:", 0, 5)) {
+                    base64 = base64.substring(comma + 1);
+                }
+                byte[] bytes = Base64.getDecoder().decode(base64);
+                img = NativeImage.read(new java.io.ByteArrayInputStream(bytes));
+                String safe = sanitize(key);
+                Identifier id = Identifier.of("kimiko", "textures/" + safe + ".png");
+                tex = new NativeImageBackedTexture(() -> "Kimiko cosmetic " + safe, img);
+                tex.upload();
+                ensureView(tex);
+                mc.getTextureManager().registerTexture(id, tex);
+                TEXTURES.put(key, id);
+                return id;
+            } catch (Throwable t) {
+                // при ошибке закрываем недозарегистрированные нативные ресурсы
+                if (tex != null) {
+                    try {
+                        tex.close();
+                    } catch (Throwable ignored) {
+                    }
+                } else if (img != null) {
+                    try {
+                        img.close();
+                    } catch (Throwable ignored) {
+                    }
+                }
                 return null;
             }
-            int comma = base64.indexOf(',');
-            if (comma >= 0 && comma < 32 && base64.regionMatches(0, "data:", 0, 5)) {
-                base64 = base64.substring(comma + 1);
-            }
-            byte[] bytes = Base64.getDecoder().decode(base64);
-            NativeImage img = NativeImage.read(new java.io.ByteArrayInputStream(bytes));
-            String safe = sanitize(key);
-            Identifier id = Identifier.of("kimiko", "textures/" + safe + ".png");
-            NativeImageBackedTexture tex = new NativeImageBackedTexture(() -> "Kimiko cosmetic " + safe, img);
-            tex.upload();
-            ensureView(tex);
-            mc.getTextureManager().registerTexture(id, tex);
-            TEXTURES.put(key, id);
-            return id;
-        } catch (Throwable t) {
-            return null;
         }
     }
 

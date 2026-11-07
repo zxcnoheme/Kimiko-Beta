@@ -280,67 +280,80 @@ public final class GifRenderer {
             }
             ImageInputStream iis = ImageIO.createImageInputStream(is);
             ImageReader reader = ImageIO.getImageReadersByFormatName("gif").next();
-            reader.setInput(iis, false, false);
-            int gifW = reader.getWidth(0);
-            int gifH = reader.getHeight(0);
-            int count = reader.getNumImages(true);
-            BufferedImage canvas = new BufferedImage(gifW, gifH, 2);
-            Graphics2D g = canvas.createGraphics();
-            g.setBackground(new Color(0, 0, 0, 0));
-            BufferedImage saved = null;
-            for (int i = 0; i < count; ++i) {
-                int fy;
-                IIOMetadata meta = reader.getImageMetadata(i);
-                Node node = meta.getAsTree(meta.getNativeMetadataFormatName());
-                Intrinsics.checkNotNull((Object)node, (String)"null cannot be cast to non-null type javax.imageio.metadata.IIOMetadataNode");
-                IIOMetadataNode root = (IIOMetadataNode)node;
-                IIOMetadataNode gce = INSTANCE.findNode(root, "GraphicControlExtension");
-                IIOMetadataNode desc = INSTANCE.findNode(root, "ImageDescriptor");
-                Object object = gce;
-                if (object == null || (object = ((IIOMetadataNode)object).getAttribute("disposalMethod")) == null) {
-                    object = "none";
-                }
-                Object disposal = object;
-                int delay = 100;
-                if (gce != null) {
-                    try {
-                        String string2 = (String) (gce.getAttribute("delayTime"));
-                        delay = Integer.parseInt(string2) * 10;
+            try {
+                reader.setInput(iis, false, false);
+                int gifW = reader.getWidth(0);
+                int gifH = reader.getHeight(0);
+                int count = reader.getNumImages(true);
+                BufferedImage canvas = new BufferedImage(gifW, gifH, 2);
+                Graphics2D g = canvas.createGraphics();
+                try {
+                    g.setBackground(new Color(0, 0, 0, 0));
+                    BufferedImage saved = null;
+                    for (int i = 0; i < count; ++i) {
+                        int fy;
+                        IIOMetadata meta = reader.getImageMetadata(i);
+                        Node node = meta.getAsTree(meta.getNativeMetadataFormatName());
+                        Intrinsics.checkNotNull((Object)node, (String)"null cannot be cast to non-null type javax.imageio.metadata.IIOMetadataNode");
+                        IIOMetadataNode root = (IIOMetadataNode)node;
+                        IIOMetadataNode gce = INSTANCE.findNode(root, "GraphicControlExtension");
+                        IIOMetadataNode desc = INSTANCE.findNode(root, "ImageDescriptor");
+                        Object object = gce;
+                        if (object == null || (object = ((IIOMetadataNode)object).getAttribute("disposalMethod")) == null) {
+                            object = "none";
+                        }
+                        Object disposal = object;
+                        int delay = 100;
+                        if (gce != null) {
+                            try {
+                                String string2 = (String) (gce.getAttribute("delayTime"));
+                                delay = Integer.parseInt(string2) * 10;
+                            }
+                            catch (Exception exception) {
+                                // empty catch block
+                            }
+                        }
+                        if (delay <= 0) {
+                            delay = 100;
+                        }
+                        IIOMetadataNode iIOMetadataNode = desc;
+                        int fx = iIOMetadataNode != null ? INSTANCE.parseInt(iIOMetadataNode.getAttribute("imageLeftPosition"), 0) : 0;
+                        IIOMetadataNode iIOMetadataNode2 = desc;
+                        int n = fy = iIOMetadataNode2 != null ? INSTANCE.parseInt(iIOMetadataNode2.getAttribute("imageTopPosition"), 0) : 0;
+                        if (Intrinsics.areEqual((Object)"restoreToPrevious", (Object)disposal)) {
+                            saved = INSTANCE.copyImage(canvas);
+                        }
+                        BufferedImage frame = reader.read(i);
+                        g.setComposite(AlphaComposite.SrcOver);
+                        g.drawImage((Image)frame, fx, fy, null);
+                        this.rawFrames.add(INSTANCE.copyImage(canvas));
+                        this.rawDelays.add(delay);
+                        if (Intrinsics.areEqual((Object)"restoreToBackgroundColor", (Object)disposal)) {
+                            g.setComposite(AlphaComposite.Clear);
+                            g.fillRect(fx, fy, frame.getWidth(), frame.getHeight());
+                            continue;
+                        }
+                        if (!Intrinsics.areEqual((Object)"restoreToPrevious", (Object)disposal) || saved == null) continue;
+                        g.setComposite(AlphaComposite.Src);
+                        g.drawImage((Image)saved, 0, 0, null);
                     }
-                    catch (Exception exception) {
-                        // empty catch block
-                    }
+                } finally {
+                    g.dispose();
                 }
-                if (delay <= 0) {
-                    delay = 100;
+                this.state = State.FRAMES_READY;
+                this.scheduleGpuUploads();
+            } finally {
+                // стримы/ридер освобождаются даже при битом кадре — раньше утекали
+                reader.dispose();
+                try {
+                    iis.close();
+                } catch (Throwable throwable) {
                 }
-                IIOMetadataNode iIOMetadataNode = desc;
-                int fx = iIOMetadataNode != null ? INSTANCE.parseInt(iIOMetadataNode.getAttribute("imageLeftPosition"), 0) : 0;
-                IIOMetadataNode iIOMetadataNode2 = desc;
-                int n = fy = iIOMetadataNode2 != null ? INSTANCE.parseInt(iIOMetadataNode2.getAttribute("imageTopPosition"), 0) : 0;
-                if (Intrinsics.areEqual((Object)"restoreToPrevious", (Object)disposal)) {
-                    saved = INSTANCE.copyImage(canvas);
+                try {
+                    is.close();
+                } catch (Throwable throwable) {
                 }
-                BufferedImage frame = reader.read(i);
-                g.setComposite(AlphaComposite.SrcOver);
-                g.drawImage((Image)frame, fx, fy, null);
-                this.rawFrames.add(INSTANCE.copyImage(canvas));
-                this.rawDelays.add(delay);
-                if (Intrinsics.areEqual((Object)"restoreToBackgroundColor", (Object)disposal)) {
-                    g.setComposite(AlphaComposite.Clear);
-                    g.fillRect(fx, fy, frame.getWidth(), frame.getHeight());
-                    continue;
-                }
-                if (!Intrinsics.areEqual((Object)"restoreToPrevious", (Object)disposal) || saved == null) continue;
-                g.setComposite(AlphaComposite.Src);
-                g.drawImage((Image)saved, 0, 0, null);
             }
-            g.dispose();
-            reader.dispose();
-            iis.close();
-            is.close();
-            this.state = State.FRAMES_READY;
-            this.scheduleGpuUploads();
         }
 
         private final void scheduleGpuUploads() {
@@ -359,6 +372,10 @@ public final class GifRenderer {
         }
 
         private final void uploadSingleFrame(int idx) {
+            NativeImage ni = null;
+            GpuTexture gpuTex = null;
+            GpuTextureView view = null;
+            boolean registered = false;
             try {
                 if (idx >= this.rawFrames.size()) {
                     return;
@@ -368,7 +385,7 @@ public final class GifRenderer {
                 BufferedImage img = bufferedImage;
                 int fw = img.getWidth();
                 int fh = img.getHeight();
-                NativeImage ni = new NativeImage(fw, fh, false);
+                ni = new NativeImage(fw, fh, false);
                 for (int py = 0; py < fh; ++py) {
                     for (int px = 0; px < fw; ++px) {
                         ni.setColorArgb(px, py, img.getRGB(px, py));
@@ -377,16 +394,18 @@ public final class GifRenderer {
                 int uid = ID_COUNTER.getAndIncrement();
                 GpuTexture gpuTexture = RenderSystem.getDevice().createTexture(() -> GifAnimation.uploadSingleFrame$lambda$0(uid), 5, TextureFormat.RGBA8, fw, fh, 1, 1);
                 Intrinsics.checkNotNullExpressionValue((Object)gpuTexture, (String)"createTexture(...)");
-                GpuTexture gpuTex = gpuTexture;
+                gpuTex = gpuTexture;
                 RenderSystem.getDevice().createCommandEncoder().writeToTexture(gpuTex, ni);
                 GpuTextureView gpuTextureView = RenderSystem.getDevice().createTextureView(gpuTex);
                 Intrinsics.checkNotNullExpressionValue((Object)gpuTextureView, (String)"createTextureView(...)");
-                GpuTextureView view = gpuTextureView;
+                view = gpuTextureView;
                 ni.close();
+                ni = null;
                 Identifier identifier2 = Identifier.of((String)"kimiko", (String)("gif/frame_" + uid));
                 Intrinsics.checkNotNullExpressionValue((Object)identifier2, (String)"fromNamespaceAndPath(...)");
                 Identifier texId = identifier2;
                 MinecraftClient.getInstance().getTextureManager().registerTexture(texId, (AbstractTexture)new GifFrameTexture(gpuTex, view, fw, fh));
+                registered = true;
                 this.frames.add(texId.toString());
                 this.frameDelays.add(this.rawDelays.get(idx));
                 this.gpuTextures.add(gpuTex);
@@ -396,7 +415,27 @@ public final class GifRenderer {
                 this.totalDuration += ((Number)n).intValue();
             }
             catch (Exception exception) {
-                // empty catch block
+                // ошибка не должна оставлять нативные ресурсы висеть
+                if (ni != null) {
+                    try {
+                        ni.close();
+                    } catch (Throwable ignored) {
+                    }
+                }
+                if (!registered) {
+                    if (view != null) {
+                        try {
+                            view.close();
+                        } catch (Throwable ignored) {
+                        }
+                    }
+                    if (gpuTex != null) {
+                        try {
+                            gpuTex.close();
+                        } catch (Throwable ignored) {
+                        }
+                    }
+                }
             }
         }
 

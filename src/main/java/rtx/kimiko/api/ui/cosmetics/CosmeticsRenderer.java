@@ -333,7 +333,7 @@ public final class CosmeticsRenderer {
                 .rotateZ((float) Math.PI)
                 .rotateX(-0.21f)
                 .rotateY((float) Math.toRadians(yaw) + (item.builtin != null ? item.builtin.ordinal() * 0.8f : 0.0f));
-        entries.add(new CosmeticPreviewState.Entry(item.id(), rotation,
+        entries.add(new CosmeticPreviewState.Entry(item.id(), item.builtin, rotation,
                 tileCx - atlasCx, tileCy - atlasCy, scale, Math.min(1.0f, alpha)));
     }
 

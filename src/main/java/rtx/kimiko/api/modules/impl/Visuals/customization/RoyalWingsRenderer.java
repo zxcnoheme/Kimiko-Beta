@@ -89,6 +89,9 @@ public final class RoyalWingsRenderer {
     private static final Map<String, AnimationData> animations;
     private static boolean loaded;
     private static long lastTimeMs;
+    private static long lastLoadFailMs;
+    private static AnimationData lastAnim;
+    private static long lastAnimStartMs;
     private static double phase;
     private static float currentSpeed;
     private static float currentAmp;
@@ -112,6 +115,9 @@ public final class RoyalWingsRenderer {
     public static final void loadModel() {
         if (loaded) {
             return;
+        }
+        if (System.currentTimeMillis() - lastLoadFailMs < 10000L) {
+            return; // недавняя неудача — не ретраим каждый кадр
         }
         try {
             Throwable throwable;
@@ -250,7 +256,9 @@ public final class RoyalWingsRenderer {
             loaded = true;
         }
         catch (Exception e) {
-            loaded = true;
+            // не помечаем «загружено» при ошибке — иначе косметика мертва до рестарта
+            lastLoadFailMs = System.currentTimeMillis();
+            System.out.println("[KIMIKO] RoyalWings: не удалось загрузить модель, повтор через 10с (" + e + ")");
         }
     }
 
@@ -329,7 +337,13 @@ public final class RoyalWingsRenderer {
         AnimationData activeAnim = animations.get(animName);
         double animTime = 0.0;
         if (activeAnim != null && activeAnim.length > 0.0) {
-            animTime = (double)(System.currentTimeMillis() % (long)(activeAnim.length * 1000.0)) / 1000.0;
+            if (activeAnim != lastAnim) {
+                lastAnim = activeAnim;
+                lastAnimStartMs = System.currentTimeMillis();
+            }
+            animTime = activeAnim.loop
+                ? (double)(System.currentTimeMillis() % (long)(activeAnim.length * 1000.0)) / 1000.0
+                : Math.min((double)(System.currentTimeMillis() - lastAnimStartMs) / 1000.0, activeAnim.length);
         }
         long timeMs = System.currentTimeMillis();
         int frameIndex = (int)(timeMs / 50L % 80L);

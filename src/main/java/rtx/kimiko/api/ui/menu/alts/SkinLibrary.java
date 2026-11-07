@@ -310,10 +310,22 @@ public final class SkinLibrary {
             try (InputStream in = Files.newInputStream(png)) {
                 img = NativeImage.read(in);
             }
-            img = remapLegacy(img);
-            if (img == null) {
+            NativeImage remapped = remapLegacy(img);
+            if (remapped == null) {
+                // remap создал новую 64x64 или исходник невалиден — исходник больше не нужен
+                try {
+                    img.close();
+                } catch (Throwable ignored) {
+                }
                 return "Размер скина не 64x64 и не 64x32";
             }
+            if (remapped != img) {
+                try {
+                    img.close();
+                } catch (Throwable ignored) {
+                }
+            }
+            img = remapped;
             PlayerSkinType model = detectModel(img);
             String key = safeKey(name);
             MinecraftClient mc = MinecraftClient.getInstance();
@@ -358,10 +370,21 @@ public final class SkinLibrary {
                 img = NativeImage.read(in);
             }
             boolean legacy = img.getHeight() == 32;
-            img = remapLegacy(img);
-            if (img == null) {
+            NativeImage remapped = remapLegacy(img);
+            if (remapped == null) {
+                try {
+                    img.close();
+                } catch (Throwable ignored) {
+                }
                 return "Размер скина не 64x64 и не 64x32";
             }
+            if (remapped != img) {
+                try {
+                    img.close();
+                } catch (Throwable ignored) {
+                }
+            }
+            img = remapped;
             PlayerSkinType model = detectModel(img);
             String k = safeKey(key);
             MinecraftClient mc = MinecraftClient.getInstance();

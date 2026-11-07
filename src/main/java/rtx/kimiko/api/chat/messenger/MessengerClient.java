@@ -226,7 +226,7 @@ public final class MessengerClient {
                 }
             }
             catch (Exception exception) {
-                // empty catch block
+                System.out.println("[KIMIKO] Мессенджер: не удалось загрузить чёрный список (" + exception + ")");
             }
             this.blockedLoaded = true;
             Unit unit = Unit.INSTANCE;
@@ -476,6 +476,9 @@ public final class MessengerClient {
             Thread.currentThread().interrupt();
         }
         catch (Exception exception) {
+            if (this.connected) {
+                System.out.println("[KIMIKO] Мессенджер: соединение потеряно (" + exception + ")");
+            }
             this.connected = false;
         }
     }

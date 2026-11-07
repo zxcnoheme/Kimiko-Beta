@@ -262,6 +262,25 @@ public final class PortalLiveStreamTexture {
         return true;
     }
 
+    /** Освобождает нативные буферы декодера (NativeImage + staging — до 64 МБ); upload() пересоздаст их при следующем кадре. */
+    private static void freeNativeBuffers() {
+        NativeImage w = work;
+        work = null;
+        if (w != null) {
+            try {
+                w.close();
+            } catch (Throwable ignored) {
+            }
+        }
+        ByteBuffer s = staging;
+        staging = null;
+        if (s != null) {
+            MemoryUtil.memFree((java.nio.Buffer) s);
+        }
+        pixels = null;
+        decodeTarget = null;
+    }
+
     @JvmStatic
     public static final void reset() {
         hasFrameVal = false;
@@ -270,6 +289,7 @@ public final class PortalLiveStreamTexture {
         pendingJpeg.set(null);
         receivedCountVal.set(0);
         shownCountVal.set(0);
+        freeNativeBuffers();
     }
 
     @JvmStatic
@@ -283,6 +303,11 @@ public final class PortalLiveStreamTexture {
         decoderBusy.set(false);
         hasFrameVal = false;
         failed = false;
+        freeNativeBuffers();
+        try {
+            MinecraftClient.getInstance().getTextureManager().destroyTexture(TEXTURE_ID);
+        } catch (Throwable ignored) {
+        }
     }
 
     private final void upload() {

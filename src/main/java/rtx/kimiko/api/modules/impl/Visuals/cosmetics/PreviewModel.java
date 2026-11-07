@@ -156,6 +156,8 @@ public final class PreviewModel {
             float[] cp = vec3(cubeJson, "pivot");
             float[] cr = vec3(cubeJson, "rotation");
             if (cp != null && cr != null) {
+                // T(pivot)·R·T(−pivot): вращение вокруг пивота куба, а не вокруг центра модели
+                stack.translate(cp[0], cp[1], cp[2]);
                 stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(cr[2]));
                 stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(cr[0]));
                 stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(cr[1]));
@@ -607,6 +609,8 @@ public final class PreviewModel {
         for (BedrockModel.Cube cube : bone.cubes) {
             stack.push();
             if (cube.pivot != null && cube.rotation != null) {
+                // T(pivot)·R·T(−pivot): вращение вокруг пивота куба, а не вокруг центра модели
+                stack.translate(cube.pivot[0], cube.pivot[1], cube.pivot[2]);
                 stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(cube.rotation[2]));
                 stack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(cube.rotation[0]));
                 stack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(cube.rotation[1]));

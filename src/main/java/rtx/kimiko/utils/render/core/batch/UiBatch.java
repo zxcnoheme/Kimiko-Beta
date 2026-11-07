@@ -57,6 +57,7 @@ implements AutoCloseable {
     @Nullable
     private GpuBuffer gpuBuffer;
     private boolean dirty;
+    private boolean writeFailureReported;
 
     public UiBatch(@NotNull String name, @NotNull UniformLayout layout, @NotNull String uniformName, int pageSize, int maxPages) {
         Intrinsics.checkNotNullParameter((Object)name, (String)"name");
@@ -216,6 +217,11 @@ implements AutoCloseable {
         }
         catch (RuntimeException ignored) {
             this.dirty = true;
+            // ретрай каждый кадр без лога делает GPU-ошибку невидимой — докладываем один раз
+            if (!this.writeFailureReported) {
+                this.writeFailureReported = true;
+                System.out.println("[KIMIKO] Ошибка записи GPU-буфера UI \"" + this.name + "\", повтор кадр за кадром: " + ignored);
+            }
         }
     }
 

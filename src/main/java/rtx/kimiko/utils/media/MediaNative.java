@@ -152,10 +152,11 @@ public final class MediaNative {
 
     private static void poll() {
         if (optMedia == null) return;
+        OptMediaArtist artist = new OptMediaArtist();
+        boolean obtained = false;
         try {
-            OptMediaArtist artist = new OptMediaArtist();
-            boolean ok = optMedia.GetCurrentMediaInfo(artist);
-            if (ok) {
+            obtained = optMedia.GetCurrentMediaInfo(artist);
+            if (obtained) {
                 String t = artist.getTitle();
                 String a = artist.getArtist();
                 String app = artist.getSource();
@@ -193,8 +194,6 @@ public final class MediaNative {
                     lastThumbnailHash = 0;
                     thumbnailVersion++;
                 }
-
-                optMedia.FreeMediaInfo(artist);
             } else {
                 if (isPlaying) {
                     isPlaying = false;
@@ -202,6 +201,14 @@ public final class MediaNative {
                 }
             }
         } catch (Throwable ignored) {
+        } finally {
+            // FreeMediaInfo освобождает нативный буфер album-art; без finally — утечка каждые 200 мс при ошибке
+            if (obtained) {
+                try {
+                    optMedia.FreeMediaInfo(artist);
+                } catch (Throwable ignored) {
+                }
+            }
         }
     }
 
@@ -445,6 +452,11 @@ public final class MediaNative {
         transcriptFallback = value;
     }
 
+    /** Один общий клиент для лирики: HttpClient держит selector-поток — нельзя плодить на каждый трек. */
+    private static final HttpClient LYRICS_HTTP = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(4))
+            .build();
+
     @JvmStatic
     @Nullable
     public static String nativeFetchLyrics(@Nullable String title, @Nullable String artist, @Nullable String album, int durationSeconds) {
@@ -452,10 +464,8 @@ public final class MediaNative {
             return null;
         }
         try {
-            HttpClient client = HttpClient.newBuilder()
-                    .connectTimeout(Duration.ofSeconds(4))
-                    .followRedirects(HttpClient.Redirect.NORMAL)
-                    .build();
+            // общий клиент; редиректами управляет NetworkPolicy (без кросс-хостных переходов)
+            HttpClient client = LYRICS_HTTP;
 
             String cleanArtist = cleanArtistName(artist);
             String cleanTitle = cleanLyricsTitle(title, cleanArtist);
@@ -598,7 +608,8 @@ public final class MediaNative {
                     .timeout(Duration.ofSeconds(5))
                     .GET()
                     .build();
-            HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+            // через NetworkPolicy: оффлайн-режим и whitelist соблюдаются
+            HttpResponse<String> resp = recovery.privacy.NetworkPolicy.send(client, request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
             if (resp.statusCode() == 200) {
                 String body = resp.body();
                 if (body == null || body.isBlank()) return null;

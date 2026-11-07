@@ -43,10 +43,16 @@ public final class CosmeticPreviewRenderer extends SpecialGuiElementRenderer<Cos
         }
         MinecraftClient.getInstance().gameRenderer.getDiffuseLighting().setShaderLights(DiffuseLighting.Type.ENTITY_IN_UI);
         for (CosmeticPreviewState.Entry entry : state.entries) {
-            PreviewModel model = CosmeticPreviews.byId(entry.cosmeticId());
-            if (model == null) {
-                ExternalCosmetic ext = ExternalCosmetic.Library.byId(entry.cosmeticId());
-                model = ext != null ? ext.preview() : null;
+            PreviewModel model;
+            if (entry.builtin() != null) {
+                // резолв по enum: id у разных категорий могут совпадать ("goat" у плеча и питомца)
+                model = CosmeticPreviews.model(entry.builtin());
+            } else {
+                model = CosmeticPreviews.byId(entry.cosmeticId());
+                if (model == null) {
+                    ExternalCosmetic ext = ExternalCosmetic.Library.byId(entry.cosmeticId());
+                    model = ext != null ? ext.preview() : null;
+                }
             }
             if (model == null || model.quads.isEmpty()) {
                 continue;

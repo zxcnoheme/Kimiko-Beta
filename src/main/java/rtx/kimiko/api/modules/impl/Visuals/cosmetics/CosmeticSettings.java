@@ -84,7 +84,7 @@ public final class CosmeticSettings {
     }
 
     public CosmeticType selectedType(CosmeticType.Cat cat) {
-        return CosmeticType.byId(this.selected(cat));
+        return CosmeticType.byId(this.selected(cat), cat);
     }
 
     public void select(CosmeticType.Cat cat, String id) {

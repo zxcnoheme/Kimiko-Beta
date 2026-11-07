@@ -110,6 +110,7 @@ public final class KanekiKaguneRenderer {
     @NotNull
     private static final String[] ATTACK_BONE_PREFIXES;
     private static boolean loaded;
+    private static long lastLoadFailMs;
 
     private KanekiKaguneRenderer() {
     }
@@ -156,6 +157,9 @@ public final class KanekiKaguneRenderer {
     public static final void loadModel() {
         if (loaded) {
             return;
+        }
+        if (System.currentTimeMillis() - lastLoadFailMs < 10000L) {
+            return; // недавняя неудача — не ретраим каждый кадр
         }
         try {
             Throwable throwable;
@@ -294,7 +298,9 @@ public final class KanekiKaguneRenderer {
             loaded = true;
         }
         catch (Exception e) {
-            loaded = true;
+            // не помечаем «загружено» при ошибке — иначе косметика мертва до рестарта
+            lastLoadFailMs = System.currentTimeMillis();
+            System.out.println("[KIMIKO] KanekiKagune: не удалось загрузить модель, повтор через 10с (" + e + ")");
         }
     }
 

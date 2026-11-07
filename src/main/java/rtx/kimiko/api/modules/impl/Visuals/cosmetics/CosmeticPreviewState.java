@@ -14,7 +14,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class CosmeticPreviewState implements SpecialGuiElementRenderState {
 
-    public record Entry(String cosmeticId, Quaternionf rotation, float u, float v, float scale, float alpha) {
+    /** builtin — конкретная встроенная косметика (если плитка не внешняя); id у разных категорий могут совпадать. */
+    public record Entry(String cosmeticId, @Nullable CosmeticType builtin, Quaternionf rotation, float u, float v, float scale, float alpha) {
     }
 
     public final List<Entry> entries;
