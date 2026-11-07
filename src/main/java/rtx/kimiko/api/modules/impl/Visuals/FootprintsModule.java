@@ -56,7 +56,7 @@ public class FootprintsModule extends Module {
     private final SliderSetting interval;
 
     public FootprintsModule() {
-        super("Footprints", "Отпечатки шагов на песке, снегу, гравии и тропинках — затираются за 10 секунд.", Category.VISUALS);
+        super("Footprints NEW", "Отпечатки шагов на песке, снегу, гравии и тропинках — затираются за 10 секунд.", Category.VISUALS);
         this.interval = (SliderSetting) this.register((Setting) new SliderSetting("Частота", "Шагов между отпечатками (в блоках).").setValue(1.6f).range(0.8f, 3.0f));
     }
 

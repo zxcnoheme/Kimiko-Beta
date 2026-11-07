@@ -22,7 +22,7 @@ public class PortalSparksModule extends Module {
     private int tickCounter;
 
     public PortalSparksModule() {
-        super("Portal Sparks", "У активных незер-порталов сыплются фиолетовые искры.", Category.VISUALS);
+        super("Portal Sparks NEW", "У активных незер-порталов сыплются фиолетовые искры.", Category.VISUALS);
         this.density = (SliderSetting) this.register((Setting) new SliderSetting("Плотность", "Сколько искр появляется.").setValue(1.0f).range(0.2f, 3.0f));
     }
 

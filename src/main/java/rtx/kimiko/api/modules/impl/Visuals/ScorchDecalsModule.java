@@ -57,7 +57,7 @@ public class ScorchDecalsModule extends Module {
     private final SliderSetting lifeMinutes;
 
     public ScorchDecalsModule() {
-        super("Scorch Decals", "Тёмные подпалины на земле от взрывов: рваные края, медленно выцветают за пару минут.", Category.VISUALS);
+        super("Scorch Decals NEW", "Тёмные подпалины на земле от взрывов: рваные края, медленно выцветают за пару минут.", Category.VISUALS);
         this.sizeScale = (SliderSetting) this.register((Setting) new SliderSetting("Размер пятна", "Множитель размера подпалины.").setValue(1.0f).range(0.5f, 2.0f));
         this.lifeMinutes = (SliderSetting) this.register((Setting) new SliderSetting("Время жизни", "Сколько секунд живёт пятно.").setValue(90.0f).range(20.0f, 180.0f));
     }

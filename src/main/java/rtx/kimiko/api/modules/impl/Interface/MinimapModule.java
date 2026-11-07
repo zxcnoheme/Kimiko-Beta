@@ -65,7 +65,7 @@ public class MinimapModule extends Module {
     private float anchorZ;
 
     public MinimapModule() {
-        super("Minimap", "Мини-карта: рельеф прогруженных чанков, игроки, мобы и вейпоинты. Колесо мыши менять масштаб нельзя — выберите приближение в настройках.", Category.DISPLAY);
+        super("Minimap NEW", "Мини-карта: рельеф прогруженных чанков, игроки, мобы и вейпоинты. Колесо мыши менять масштаб нельзя — выберите приближение в настройках.", Category.DISPLAY);
         this.shape = (ModeSetting) this.register((Setting) new ModeSetting("Форма", "Форма карты.", "Круг", "Круг", "Квадрат"));
         this.zoom = (ModeSetting) this.register((Setting) new ModeSetting("Приближение", "Сколько блоков видно по ширине карты.", "Средне", "Близко", "Средне", "Далеко"));
         this.corner = (ModeSetting) this.register((Setting) new ModeSetting("Позиция", "Угол экрана.", "Правый верх", "Правый верх", "Левый верх"));

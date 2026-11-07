@@ -26,7 +26,7 @@ public class FallingLeavesModule extends Module {
     private int tickCounter;
 
     public FallingLeavesModule() {
-        super("Falling Leaves", "Под кронами медленно падают листья, слегка сносимые ветром.", Category.VISUALS);
+        super("Falling Leaves NEW", "Под кронами медленно падают листья, слегка сносимые ветром.", Category.VISUALS);
         this.density = (SliderSetting) this.register((Setting) new SliderSetting("Плотность", "Как часто появляются листья.").setValue(1.0f).range(0.2f, 3.0f));
     }
 

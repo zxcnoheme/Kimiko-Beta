@@ -20,7 +20,7 @@ public class NightComfortModule extends Module {
     private final SliderSetting strength;
 
     public NightComfortModule() {
-        super("Night Comfort", "Тёплый фильтр экрана ночью (по реальным часам): меньше напряжения на глаза.", Category.VISUALS);
+        super("Night Comfort NEW", "Тёплый фильтр экрана ночью (по реальным часам): меньше напряжения на глаза.", Category.VISUALS);
         this.strength = (SliderSetting) this.register((Setting) new SliderSetting("Сила", "Насколько сильно подкрашивать экран.").setValue(0.5f).range(0.1f, 1.0f));
     }
 

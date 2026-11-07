@@ -54,7 +54,7 @@ public class WetGroundModule extends Module {
     private final SliderSetting drySeconds;
 
     public WetGroundModule() {
-        super("Wet Ground", "Во время дождя и сразу после на земле мерцают мокрые пятна, которые высыхают.", Category.VISUALS);
+        super("Wet Ground NEW", "Во время дождя и сразу после на земле мерцают мокрые пятна, которые высыхают.", Category.VISUALS);
         this.density = (SliderSetting) this.register((Setting) new SliderSetting("Плотность", "Как часто появляются пятна.").setValue(1.0f).range(0.2f, 3.0f));
         this.drySeconds = (SliderSetting) this.register((Setting) new SliderSetting("Высыхание", "Секунд высыхания после дождя.").setValue(75.0f).range(20.0f, 180.0f));
     }

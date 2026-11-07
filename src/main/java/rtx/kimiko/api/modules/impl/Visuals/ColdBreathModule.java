@@ -20,7 +20,7 @@ public class ColdBreathModule extends Module {
     private int nextBreath;
 
     public ColdBreathModule() {
-        super("Cold Breath", "В холодных биомах изо рта клубится пар при дыхании.", Category.VISUALS);
+        super("Cold Breath NEW", "В холодных биомах изо рта клубится пар при дыхании.", Category.VISUALS);
         this.interval = (SliderSetting) this.register((Setting) new SliderSetting("Частота", "Секунд между выдохами.").setValue(2.0f).range(1.0f, 5.0f));
         this.nextBreath = 0;
     }

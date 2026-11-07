@@ -19,7 +19,7 @@ public class GoldenHourModule extends Module {
     private final SliderSetting strength;
 
     public GoldenHourModule() {
-        super("Golden Hour", "Тёплый солнечный оттенок на закате — время золотого часа.", Category.VISUALS);
+        super("Golden Hour NEW", "Тёплый солнечный оттенок на закате — время золотого часа.", Category.VISUALS);
         this.strength = (SliderSetting) this.register((Setting) new SliderSetting("Сила", "Насколько сильно подсвечивать закат.").setValue(0.6f).range(0.1f, 1.0f));
     }
 

@@ -41,7 +41,7 @@ public class BlobShadowsModule extends Module {
     private static boolean textureFailed;
 
     public BlobShadowsModule() {
-        super("Blob Shadows", "Мягкие тени-эллипсы под сущностями: чем выше сущность, тем бледнее и больше тень.", Category.VISUALS);
+        super("Blob Shadows NEW", "Мягкие тени-эллипсы под сущностями: чем выше сущность, тем бледнее и больше тень.", Category.VISUALS);
         this.mode = (ModeSetting) this.register((Setting) new ModeSetting("Кого показывать", "Чьи тени рисовать.", "Все сущности", "Все сущности", "Только игроки"));
         this.strength = (SliderSetting) this.register((Setting) new SliderSetting("Плотность", "Общая плотность тени.").setValue(0.55f).range(0.15f, 1.0f));
         this.scale = (SliderSetting) this.register((Setting) new SliderSetting("Размер", "Множитель размера тени.").setValue(1.0f).range(0.5f, 2.0f));

@@ -70,7 +70,7 @@ public class WaypointsModule extends Module {
     private static final List<Marker> projected = new ArrayList<>();
 
     public WaypointsModule() {
-        super("Waypoints", "3D-метки на карте мира: видны сквозь стены, с именем и дистанцией. Клавиша ставит точку под вами.", Category.VISUALS);
+        super("Waypoints NEW", "3D-метки на карте мира: видны сквозь стены, с именем и дистанцией. Клавиша ставит точку под вами.", Category.VISUALS);
         this.autoDeath = (BooleanSetting) this.register((Setting) new BooleanSetting("Точка на смерти", "Автоматически ставить вейпоинт там, где вы умерли.", true));
         this.showName = (BooleanSetting) this.register((Setting) new BooleanSetting("Название", "Показывать название точки.", true));
         this.showDist = (BooleanSetting) this.register((Setting) new BooleanSetting("Дистанция", "Показывать дистанцию в блоках.", true));

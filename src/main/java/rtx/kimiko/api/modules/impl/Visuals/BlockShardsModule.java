@@ -67,7 +67,7 @@ public class BlockShardsModule extends Module {
     private final BooleanSetting digDebris;
 
     public BlockShardsModule() {
-        super("Block Shards", "Ломаемый блок разлетается на кусочки в цвете блока: падают, отскачивают и тают. Работает и при копании.", Category.VISUALS);
+        super("Block Shards NEW", "Ломаемый блок разлетается на кусочки в цвете блока: падают, отскачивают и тают. Работает и при копании.", Category.VISUALS);
         this.density = (SliderSetting) this.register((Setting) new SliderSetting("Количество", "Сколько осколков на блок.").setValue(8.0f).range(3.0f, 16.0f));
         this.sizeScale = (SliderSetting) this.register((Setting) new SliderSetting("Размер", "Множитель размера осколков.").setValue(1.0f).range(0.5f, 1.8f));
         this.digDebris = (BooleanSetting) this.register((Setting) new BooleanSetting("Крошка при копании", "Осколки летят и во время добычи, а не только при разломе.", true));

@@ -28,7 +28,7 @@ public class FirefliesModule extends Module {
     private int tickCounter;
 
     public FirefliesModule() {
-        super("Fireflies", "Светлячки над травой в сумерках и ночью — в лесах, на лугах и болотах.", Category.VISUALS);
+        super("Fireflies NEW", "Светлячки над травой в сумерках и ночью — в лесах, на лугах и болотах.", Category.VISUALS);
         this.where = (ModeSetting) this.register((Setting) new ModeSetting("Где светятся", "Биомы для светлячков.", "Леса и луга", "Леса и луга", "Везде"));
         this.density = (SliderSetting) this.register((Setting) new SliderSetting("Плотность", "Сколько светляков появляется.").setValue(1.0f).range(0.2f, 3.0f));
     }
