@@ -147,7 +147,8 @@
     "emotions.PictureInPictureRendererAccessor",
     "emotions.GuiRendererEmotionPipMixin",
     "MainMenuMixin",
-    "SplashMixin"
+    "SplashMixin",
+    "OptionsScreenMixin"
   ],
   "injectors": {
     "maxShiftBy": 2,
