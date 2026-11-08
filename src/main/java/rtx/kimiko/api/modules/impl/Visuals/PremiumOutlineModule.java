@@ -18,31 +18,40 @@ import rtx.kimiko.api.events.impl.render.WorldRenderEvent;
 import rtx.kimiko.api.modules.Category;
 import rtx.kimiko.api.modules.Module;
 import rtx.kimiko.api.modules.settings.Setting;
+import rtx.kimiko.api.modules.settings.impl.ColorSetting;
+import rtx.kimiko.api.modules.settings.impl.ModeSetting;
 import rtx.kimiko.api.modules.settings.impl.SliderSetting;
-import rtx.kimiko.api.ui.theme.ThemeManager;
 import rtx.kimiko.utils.render.others.pipeline.ClientPipelines;
 
 /**
- * Премиум-обводка блока: ванильная рамка заменяется на светящуюся,
- * пульсирующую рамку в цвете акцента клиента.
+ * Block Outline: обводка блока под прицелом — три вида (свечение, заливка,
+ * окантовка) и любой цвет.
  */
 public class PremiumOutlineModule extends Module {
-    private static final Identifier TEXTURE = Identifier.of("kimiko", "textures/ui/premium_outline.png");
-    private static final int TEXTURE_SIZE = 32;
+    private static final Identifier GLOW_TEX = Identifier.of("kimiko", "textures/ui/premium_outline.png");
+    private static final Identifier SHARP_TEX = Identifier.of("kimiko", "textures/ui/premium_outline_sharp.png");
+    private static final Identifier FILL_TEX = Identifier.of("kimiko", "textures/ui/premium_outline_fill.png");
+    private static final int TEX_SIZE = 32;
 
-    private static boolean textureReady;
+    private static boolean glowReady;
+    private static boolean sharpReady;
+    private static boolean fillReady;
     private static boolean textureFailed;
     private static PremiumOutlineModule instance;
 
+    private final ModeSetting style;
+    private final ColorSetting color;
     private final SliderSetting glow;
 
     public PremiumOutlineModule() {
-        super("Premium Outline NEW", "Светящаяся пульсирующая обводка блока под прицелом вместо ванильной рамки.", Category.VISUALS);
-        this.glow = (SliderSetting) this.register((Setting) new SliderSetting("Свечение", "Яркость свечения рамки.").setValue(0.7f).range(0.2f, 1.0f));
+        super("Block Outline NEW", "Обводка блока под прицелом: вид (свечение / заливка / окантовка), цвет и яркость.", Category.VISUALS);
+        this.style = (ModeSetting) this.register((Setting) new ModeSetting("Вид", "Стиль обводки.", "Шейдер", "Шейдер", "Заливка", "Окантовка"));
+        this.color = (ColorSetting) this.register((Setting) new ColorSetting("Цвет", "Цвет обводки.").value(0xFFFFFFFF));
+        this.glow = (SliderSetting) this.register((Setting) new SliderSetting("Яркость", "Яркость обводки.").setValue(0.7f).range(0.2f, 1.0f));
         instance = this;
     }
 
-    /** Для миксина: гасить ванильную обводку, пока включён премиум. */
+    /** Для миксина: гасить ванильную обводку, пока включён любой вид. */
     public static boolean cancelVanilla() {
         PremiumOutlineModule module = instance;
         return module != null && module.isEnabled();
@@ -56,8 +65,8 @@ public class PremiumOutlineModule extends Module {
         if (!(this.mc.crosshairTarget instanceof BlockHitResult hit) || hit.getType() != HitResult.Type.BLOCK) {
             return;
         }
-        ensureTexture();
-        if (!textureReady) {
+        String styleNow = this.style.getValue();
+        if (!ensureTexture(styleNow)) {
             return;
         }
         BlockPos pos = hit.getBlockPos();
@@ -74,11 +83,15 @@ public class PremiumOutlineModule extends Module {
         long now = System.currentTimeMillis();
         float pulse = 0.72f + 0.28f * (float) Math.sin(now * 0.005);
         float alpha = MathHelper.clamp(this.glow.getValue() * pulse, 0.0f, 1.0f);
-        int argb = (((int) (alpha * 255.0f)) << 24) | 0xFFFFFF;
+        int tint = this.color.getColor() & 0xFFFFFF;
+        int argb = (((int) (alpha * 255.0f)) << 24) | tint;
+
+        Identifier tex = "Заливка".equals(styleNow) ? FILL_TEX
+                : "Окантовка".equals(styleNow) ? SHARP_TEX : GLOW_TEX;
 
         MatrixStack stack = event.getStack();
         VertexConsumerProvider.Immediate immediate = this.mc.getBufferBuilders().getEntityVertexConsumers();
-        RenderLayer layer = ClientPipelines.MARKER.apply(TEXTURE);
+        RenderLayer layer = ClientPipelines.MARKER.apply(tex);
         VertexConsumer buffer = immediate.getBuffer(layer);
 
         float e = 0.004f;
@@ -113,40 +126,75 @@ public class PremiumOutlineModule extends Module {
         buffer.vertex(entry, x4, y4, z4).texture(0.0f, 1.0f).color(argb);
     }
 
-    private static void ensureTexture() {
-        if (textureReady) {
-            return;
+    private static boolean ensureTexture(String styleNow) {
+        if ("Заливка".equals(styleNow)) {
+            if (fillReady || textureFailed) {
+                return fillReady;
+            }
+            try {
+                NativeImage image = new NativeImage(8, 8, false);
+                for (int y = 0; y < 8; y++) {
+                    for (int x = 0; x < 8; x++) {
+                        image.setColorArgb(x, y, 0xFFFFFFFF);
+                    }
+                }
+                registerTex(FILL_TEX, image, "fill");
+                fillReady = true;
+            } catch (Throwable t) {
+                textureFailed = true;
+            }
+            return fillReady;
+        }
+        boolean sharp = "Окантовка".equals(styleNow);
+        boolean ready = sharp ? sharpReady : glowReady;
+        if (ready || textureFailed) {
+            return ready;
         }
         try {
-            NativeImage image = new NativeImage(TEXTURE_SIZE, TEXTURE_SIZE, false);
-            int border = 4;
-            for (int y = 0; y < TEXTURE_SIZE; y++) {
-                for (int x = 0; x < TEXTURE_SIZE; x++) {
-                    float d = Math.min(Math.min(x, TEXTURE_SIZE - 1 - x), Math.min(y, TEXTURE_SIZE - 1 - y));
+            NativeImage image = new NativeImage(TEX_SIZE, TEX_SIZE, false);
+            int border = sharp ? 2 : 4;
+            for (int y = 0; y < TEX_SIZE; y++) {
+                for (int x = 0; x < TEX_SIZE; x++) {
+                    float d = Math.min(Math.min(x, TEX_SIZE - 1 - x), Math.min(y, TEX_SIZE - 1 - y));
                     float a;
                     if (d < border) {
-                        a = 1.0f - d / (float) border * 0.55f;
-                    } else {
+                        a = 1.0f - d / (float) border * (sharp ? 0.2f : 0.55f);
+                    } else if (!sharp) {
                         a = MathHelper.clamp(1.0f - (d - border) / 6.0f, 0.0f, 1.0f) * 0.45f;
                         if (d > border + 6) {
                             a = 0.0f;
                         }
+                    } else {
+                        a = 0.0f;
                     }
                     image.setColorArgb(x, y, ((int) (a * 255.0f) << 24) | 0xFFFFFF);
                 }
             }
-            NativeImageBackedTexture tex = new NativeImageBackedTexture(() -> "Kimiko premium outline", image);
+            registerTex(sharp ? SHARP_TEX : GLOW_TEX, image, sharp ? "sharp" : "glow");
+            if (sharp) {
+                sharpReady = true;
+            } else {
+                glowReady = true;
+            }
+        } catch (Throwable t) {
+            textureFailed = true;
+            System.out.println("[KIMIKO] Block Outline: не удалось создать текстуру (" + t + ")");
+        }
+        return sharp ? sharpReady : glowReady;
+    }
+
+    private static void registerTex(Identifier id, NativeImage image, String tag) {
+        try {
+            NativeImageBackedTexture tex = new NativeImageBackedTexture(() -> "Kimiko outline " + tag, image);
             tex.upload();
             if (tex.getGlTextureView() == null && tex.getGlTexture() != null) {
                 com.mojang.blaze3d.textures.GpuTextureView view =
                         com.mojang.blaze3d.systems.RenderSystem.getDevice().createTextureView(tex.getGlTexture());
                 ((mixin.skins.AbstractTextureAccessor) (Object) tex).kimiko$setView(view);
             }
-            MinecraftClient.getInstance().getTextureManager().registerTexture(TEXTURE, tex);
-            textureReady = true;
+            MinecraftClient.getInstance().getTextureManager().registerTexture(id, tex);
         } catch (Throwable t) {
-            textureFailed = true;
-            System.out.println("[KIMIKO] Premium Outline: не удалось создать текстуру (" + t + ")");
+            System.out.println("[KIMIKO] Block Outline: регистрация текстуры не удалась (" + t + ")");
         }
     }
 }

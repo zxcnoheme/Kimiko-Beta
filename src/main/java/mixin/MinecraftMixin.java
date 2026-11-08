@@ -134,6 +134,13 @@ public abstract class MinecraftMixin {
         EventBus.get().post(TickEvent.POST);
     }
 
+    @Inject(method={"doAttack"}, at={@At(value="HEAD")}, cancellable=true)
+    private void kimiko$attackThroughFoliage(CallbackInfoReturnable<Boolean> cir) {
+        if (rtx.kimiko.api.modules.impl.Utils.FoliageFightModule.tryAttack((MinecraftClient)(Object)this)) {
+            cir.setReturnValue(true);
+        }
+    }
+
     @Inject(method={"doAttack"}, at={@At(value="HEAD")})
     private void kimiko$clientAttackFallback(CallbackInfoReturnable<Boolean> cir) {
         try {

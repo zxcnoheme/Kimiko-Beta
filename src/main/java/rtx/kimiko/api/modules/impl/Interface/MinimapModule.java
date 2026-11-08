@@ -163,7 +163,7 @@ public class MinimapModule extends Module {
                 if (y > bottomY) {
                     BlockPos pos = new BlockPos(baseX + x, y - 1, baseZ + z);
                     MapColor mapColor = chunk.getBlockState(pos).getMapColor(world, pos);
-                    float shade = 0.62f + 0.38f * MathHelper.clamp((y - 56.0f) / 48.0f, 0.0f, 1.0f);
+                    float shade = 0.45f + 0.55f * MathHelper.clamp((y - 50.0f) / 34.0f, 0.0f, 1.0f);
                     if (night) {
                         shade *= 0.62f;
                     }
